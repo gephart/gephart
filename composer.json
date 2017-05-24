@@ -1,0 +1,32 @@
+{
+  "name": "gephart/generator-edition",
+  "type": "library",
+  "description": "Gephart Generator Edition",
+  "keywords": [],
+  "homepage": "https://github.com/gephart/generator-edition",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Michal Katuščák",
+      "email": "michal@katuscak.cz"
+    }
+  ],
+  "require": {
+    "php": ">=7.0",
+    "gephart/framework": "0.3.*"
+  },
+  "autoload": {
+    "psr-4": { "": "src/" },
+    "exclude-from-classmap": [
+      "/Tests/"
+    ]
+  },
+  "scripts": {
+    "gephart-scripts": [
+      "Gephart\\Framework\\Composer\\Scripts::install"
+    ],
+    "post-create-project-cmd": [
+      "@gephart-scripts"
+    ]
+  }
+}

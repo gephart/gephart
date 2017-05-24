@@ -1,0 +1,74 @@
+{% extends "admin/default.html.twig" %}
+
+{% block content %}
+
+    <h1>Produkty</h1>
+
+    <p>
+        <button class="btn btn-success" onclick="document.getElementById('form-add').style.display='block';this.style.display='none'">Přidat</button>
+    </p>
+
+    <div id="form-add" style="display: none">
+        <form action="{{ _router.generateUrl("admin_product") }}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="form_new_name">Název</label>
+                <input type="text" name="name" class="form-control" id="form_new_name">
+            </div>
+            <div class="form-group">
+                <label for="form_new_text">Texťík</label>
+                <textarea class="form-control" name="text" rows="10" id="form_new_text"></textarea>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="active" value="1">
+                    Aktivní
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="form_edit_page_of_product">Stránka produktu</label>
+                <select name="page_of_product" class="form-control" id="form_edit_page_of_product">
+                    <option value="0">--- Vyberte ---</option>
+                    {% for page_of_product in page_of_products %}
+                        <option value="{{ page_of_product.id }}">
+                        {% if page_of_product.title %}
+                            {{ page_of_product.title }}
+                        {% elseif page_of_product.name %}
+                            {{ page_of_product.name }}
+                        {% else %}
+                            #{{ page_of_product.id }}
+                        {% endif %}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="form_new_obrazek">Obrázek</label>
+                <input type="file" name="obrazek" class="form-control" id="form_new_obrazek">
+            </div>
+            <div class="form-group">
+                <label for="form_new_soubor">Soubor</label>
+                <input type="file" name="soubor" class="form-control" id="form_new_soubor">
+            </div>
+            <button type="submit" class="btn btn-default">Přidat</button>
+        </form>
+        <br/>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            {% for product in products %}
+                <tr>
+                    <td>
+                        <a href="{{ _router.generateUrl("admin_product_edit", {"id":product.id}) }}">{{ product.name }}</a>
+                    </td>
+                    <td width="130">
+                        <a class="btn btn-xs btn-success" href="{{ _router.generateUrl("admin_product_edit", {"id":product.id}) }}">upravit</a>
+                        <a class="btn btn-xs btn-danger" href="{{ _router.generateUrl("admin_product_delete", {"id":product.id}) }}"
+                           onclick="return confirm('Opravdu?')">smazat</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+{% endblock %}
