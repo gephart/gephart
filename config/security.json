@@ -12,7 +12,7 @@
     }
   },
   "users": {
-    "admin": {
+    "admin@admin.admin": {
       "password": "$2y$10$Yw7KgUSoSk2m3fIWBie1Xu4jXESX4T.wOq0NJp.nv1syPEEUrmA9i",
       "roles": ["ROLE_ADMIN"]
     }
