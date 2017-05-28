@@ -12,9 +12,6 @@ final class Menu
             "title" => "Nástěnka",
             "icon" => "home"
         ],
-        "news" => [
-            "title" => "Novinky"
-        ],
         "generator" => [
             "title" => "Generátor",
             "icon" => "console"

@@ -22,6 +22,10 @@ class ItemRepository
     {
         $this->entity_class = Item::class;
         $this->entity_manager = $entity_manager;
+
+        try {
+            $this->entity_manager->syncTable($this->entity_class);
+        } catch (\Exception $e) {}
     }
 
     public function findBy(array $find_by = [], array $params = [])
