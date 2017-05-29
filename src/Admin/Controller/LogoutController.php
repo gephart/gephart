@@ -2,6 +2,7 @@
 
 namespace Admin\Controller;
 
+use Gephart\Routing\Exception\NotFoundRouteException;
 use Gephart\Routing\Router;
 use Gephart\Security\Authenticator\Authenticator;
 
@@ -36,7 +37,15 @@ final class LogoutController
     public function index()
     {
         $this->authenticator->unauthorise();
-        $url = $this->router->generateUrl("homepage");
+
+        try {
+            $url = $this->router->generateUrl("homepage");
+        } catch (NotFoundRouteException $exception) {
+            $url = $this->router->generateUrl("app\controller\defaultcontroller_index");
+        } catch (\Exception $exception) {
+            $url = "/";
+        }
+
         header("location: $url");
         exit;
     }
