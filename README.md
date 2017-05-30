@@ -12,3 +12,9 @@ Instalation
 ```bash
 composer create-project gephart/generator-edition
 ```
+
+Authetification
+---
+
+Login: admin@admin.admin
+Password: admin.123
