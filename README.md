@@ -13,8 +13,9 @@ Instalation
 composer create-project gephart/generator-edition
 ```
 
-Authetification
+Authentication
 ---
 
 Login: admin@admin.admin
+
 Password: admin.123
