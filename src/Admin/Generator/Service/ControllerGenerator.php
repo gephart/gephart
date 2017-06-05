@@ -2,6 +2,8 @@
 
 namespace Admin\Generator\Service;
 
+use Admin\Generator\Entity\Item;
+use Admin\Generator\Entity\Module;
 use Admin\Generator\Repository\ItemRepository;
 use Admin\Generator\Repository\ModuleRepository;
 use Gephart\Framework\Template\Engine;
@@ -56,9 +58,12 @@ class ControllerGenerator
         $module = $this->module_repository->find($module_id);
         $items = $this->item_repository->findBy(["module_id = %1", $module_id], ["ORDER BY" => "id"]);
 
+        $entities = $this->getEntities($module, $items);
+
         $entity_template = $this->template_engine->render("admin/generator/template/controller.php.twig", [
             "module" => $module,
-            "items" => $items
+            "items" => $items,
+            "entities" => $entities
         ]);
 
         $filename = $module->getEntityName() . "Controller.php";
@@ -69,5 +74,18 @@ class ControllerGenerator
         } catch (\Exception $e) {}
 
         return htmlspecialchars($entity_template);
+    }
+
+    private function getEntities(Module $module, $items) {
+        $entities = [$module->getEntityName()];
+
+        /** @var Item $item */
+        foreach ($items as $item) {
+            if ($item->isRelation()) {
+                $entities[] = $item->getType();
+            }
+        }
+
+        return array_unique($entities);
     }
 }
