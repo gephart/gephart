@@ -42,7 +42,7 @@ class ControllerGenerator
         $this->module_repository = $module_repository;
         $this->item_repository = $item_repository;
         $this->template_engine = $template_engine;
-        $this->controller_dir = realpath(__DIR__ . "/../Controller");
+        $this->controller_dir = realpath(__DIR__ . "/../../Controller");
     }
 
     public function isGenerated(int $module_id)
