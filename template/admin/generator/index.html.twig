@@ -19,22 +19,57 @@
                         <table class="table table-bordered">
                             <tr>
                                 <th>Entita:</th>
+                                <td>
+                                    {% if modules_status[module.entityName].entity %}
+                                        existuje
+                                    {% else %}
+                                        neexistuje
+                                    {% endif %}
+                                </td>
                                 <td><button class="btn btn-xs btn-warning js-generator-entitysync-show" data-toggle="modal" data-target="#generator-modal">Generovat</button></td>
                             </tr>
                             <tr>
                                 <th>Repozitář:</th>
+                                <td>
+                                    {% if modules_status[module.entityName].repository %}
+                                        existuje
+                                    {% else %}
+                                        neexistuje
+                                    {% endif %}
+                                </td>
                                 <td><button class="btn btn-xs btn-warning js-generator-repositorysync-show" data-toggle="modal" data-target="#generator-modal">Generovat</button></td>
                             </tr>
                             <tr>
                                 <th>Tabulka:</th>
+                                <td>
+                                    {% if modules_status[module.entityName].table %}
+                                        existuje
+                                    {% else %}
+                                        neexistuje
+                                    {% endif %}
+                                </td>
                                 <td><button class="btn btn-xs btn-warning js-generator-tablesync-show" data-toggle="modal" data-target="#generator-modal">Generovat</button></td>
                             </tr>
                             <tr>
                                 <th>Controller:</th>
+                                <td>
+                                    {% if modules_status[module.entityName].controller %}
+                                        existuje
+                                    {% else %}
+                                        neexistuje
+                                    {% endif %}
+                                </td>
                                 <td><button class="btn btn-xs btn-warning js-generator-controllersync-show" data-toggle="modal" data-target="#generator-modal">Generovat</button></td>
                             </tr>
                             <tr>
                                 <th>Šablony:</th>
+                                <td>
+                                    {% if modules_status[module.entityName].view %}
+                                        existuje
+                                    {% else %}
+                                        neexistuje
+                                    {% endif %}
+                                </td>
                                 <td><button class="btn btn-xs btn-warning js-generator-viewsync-show" data-toggle="modal" data-target="#generator-modal">Generovat</button></td>
                             </tr>
                         </table>
