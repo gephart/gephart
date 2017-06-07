@@ -16,6 +16,8 @@ composer create-project gephart/generator-edition
 Authentication
 ---
 
+http://localhost/admin
+
 Login: admin@admin.admin
 
 Password: admin.123
