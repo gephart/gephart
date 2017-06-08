@@ -10,13 +10,13 @@ Instalation
 ---
 
 ```bash
-composer create-project gephart/generator-edition
+composer create-project gephart/generator-edition blog dev-master
 ```
 
 Authentication
 ---
 
-http://localhost/admin
+http://localhost/blog/web/admin
 
 Login: admin@admin.admin
 
