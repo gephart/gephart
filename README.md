@@ -21,3 +21,8 @@ http://localhost/blog/web/admin
 Login: admin@admin.admin
 
 Password: admin.123
+
+Documentation
+---
+
+https://www.gephart.cz/generator.html
