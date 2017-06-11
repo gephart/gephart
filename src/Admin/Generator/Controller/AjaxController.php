@@ -2,6 +2,7 @@
 
 namespace Admin\Generator\Controller;
 
+use Admin\Generator\Entity\Module;
 use Admin\Generator\Repository\ItemRepository;
 use Admin\Generator\Repository\ModuleRepository;
 use Admin\Generator\Service\ControllerGenerator;
@@ -12,6 +13,7 @@ use Gephart\Framework\Response\TemplateResponse;
 use Gephart\ORM\EntityManager;
 use Gephart\ORM\SQLBuilder;
 use Gephart\Request\Request;
+use Gephart\Response\ResponseJson;
 
 /**
  * @Security ROLE_ADMIN
@@ -202,6 +204,35 @@ class AjaxController
         }
 
         return $this->view_generator->generate($id);
+    }
+
+    /**
+     * @Route {
+     *  "rule": "/save_sort_modules",
+     *  "name": "admin_generator_ajax_savesortmodules"
+     * }
+     */
+    public function saveSortModules()
+    {
+        $sorts = $this->request->get("sorts");
+        if (empty($sorts)) {
+            throw new \Exception("Sorts must be sent in request.");
+        }
+
+        $modules = $this->module_repository->findBy();
+
+        $sort = 0;
+        foreach ($sorts as $module_id) {
+            /** @var Module $module */
+            foreach ($modules as $module) {
+                if ($module->getId() == $module_id) {
+                    $module->setSort(++$sort);
+                    $this->entity_manager->save($module);
+                }
+            }
+        }
+
+        return new ResponseJson(["sorted" => $sort]);
     }
 
 }

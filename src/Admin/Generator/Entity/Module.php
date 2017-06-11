@@ -58,6 +58,14 @@ class Module
     private $icon = "";
 
     /**
+     * @var int
+     *
+     * @ORM\Type int
+     * @ORM\Column sort
+     */
+    private $sort = 0;
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -156,6 +164,22 @@ class Module
     public function setIcon(string $icon)
     {
         $this->icon = $icon;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSort(): int
+    {
+        return $this->sort;
+    }
+
+    /**
+     * @param int $sort
+     */
+    public function setSort(int $sort)
+    {
+        $this->sort = $sort;
     }
 
 }

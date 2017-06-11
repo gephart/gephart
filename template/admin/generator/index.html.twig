@@ -8,11 +8,14 @@
         <a href="{{ _router.generateUrl("admin_generator_new") }}" class="btn btn-success">Nový modul</a>
     </p>
 
-    <div class="row">
+    <div class="row noselect">
         {% for module in modules %}
-            <div class="col-lg-4 col-md-6">
-                <div class="panel panel-default js-generator-module" data-generator-module_id="{{ module.id }}">
+            <div class="col-lg-4 col-md-6 js-generator-module" data-generator-module_id="{{ module.id }}">
+                <div class="panel panel-default">
                     <div class="panel-heading">
+                        <div class="pull-right">
+                            <span class="btn btn-xs btn-info js-generator-module-move"><small><i class="glyphicon glyphicon-move"></i></small></span>
+                        </div>
                         <h3 class="panel-title">{{ module.name }}</h3>
                     </div>
                     <div class="panel-body">
@@ -104,6 +107,19 @@
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/atom-one-light.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+
+
+{% endblock %}
+
+
+{% block javascripts %}
+
+    {{ parent() }}
+
+    <script src="assets/admin/js/drag-arrange.js"></script>
+    <script>
+        $('.js-generator-module').arrangeable({dragSelector: '.js-generator-module-move'});
+    </script>
 
 
 {% endblock %}

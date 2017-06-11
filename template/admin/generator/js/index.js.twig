@@ -146,4 +146,17 @@ $(function () {
         }
     });
 
+
+    $("body").on("drag.end.arrangeable", function(){
+        var sorts = [];
+
+        $('.js-generator-module').each(function(){
+            sorts.push($(this).data("generator-module_id"));
+        });
+
+        $.get("{{ _router.generateUrl("admin_generator_ajax_savesortmodules") }}", {
+            "sorts": sorts
+        });
+    });
+
 });

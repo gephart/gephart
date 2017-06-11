@@ -30,6 +30,10 @@ class ModuleRepository
 
     public function findBy(array $find_by = [], array $params = [])
     {
+        if (empty($params["ORDER BY"])) {
+            $params["ORDER BY"] = "sort, id DESC";
+        }
+
         return $this->entity_manager->findBy($this->entity_class, $find_by, $params);
     }
 
