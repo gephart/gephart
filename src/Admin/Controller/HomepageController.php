@@ -24,7 +24,7 @@ class HomepageController
 
     /**
      * @Route {
-     *  "rule": "/admin",
+     *  "rule": "/admin/homepage",
      *  "name": "admin_homepage"
      * }
      */
