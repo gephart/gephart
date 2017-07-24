@@ -66,7 +66,7 @@ final class Menu
             $item->setTitle(!empty($menu_item["title"])?$menu_item["title"]:"");
             $item->setIcon(!empty($menu_item["icon"])?$menu_item["icon"]:"");
 
-            if ($link == $actual_link) {
+            if (strpos($actual_link, $link) === 0) {
                 $item->setActive(true);
             }
 

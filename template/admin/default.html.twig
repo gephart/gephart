@@ -36,7 +36,7 @@
             <ul>
                 {% for menu_item in menu_list %}
                     <li>
-                        <a href="{{ menu_item.link }}">
+                        <a href="{{ menu_item.link }}" {% if menu_item.active %}class="active"{% endif %}>
                             {% if menu_item.icon %}
                                 <i class="glyphicon glyphicon-{{ menu_item.icon }}"></i>
                             {% else %}
