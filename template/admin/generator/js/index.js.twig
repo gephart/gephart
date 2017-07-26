@@ -96,7 +96,7 @@ $(function () {
             $.get("{{ _router.generateUrl("admin_generator_ajax_repositorysync") }}", {
                 "id": id
             }, function (html) {
-                $("#generator-modal-label").html("Repozitáž by vygenerován:");
+                $("#generator-modal-label").html("Repozitář by vygenerován:");
                 $("#generator-modal-content").html("<pre><code class='php'>" + html + "</code></pre>");
                 $('#generator-modal-content pre code').each(function (i, block) {
                     hljs.highlightBlock(block);
