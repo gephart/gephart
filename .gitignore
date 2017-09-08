@@ -1,5 +1,5 @@
 vendor/
 composer.lock
 \.DS_Store
-template/_framework
+/template/_framework
 /cache
