@@ -3,8 +3,8 @@ Gephart Generator Edition
 
 Dependencies
 ---
- - PHP >= 7.0
- - gephart/framework >= 0.3
+ - PHP >= 7.1
+ - gephart/framework >= 0.4
 
 Instalation
 ---

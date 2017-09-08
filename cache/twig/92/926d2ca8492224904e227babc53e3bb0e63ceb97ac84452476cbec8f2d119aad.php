@@ -1,4 +1,22 @@
-._gf-line, ._gf-line * {
+<?php
+
+/* _framework/assets/css/main.css */
+class __TwigTemplate_e0a0d9ee435b2af04d595ce6d1794e2cee278ff8ba4dd630f4d0d848fc8ad010 extends Twig_Template
+{
+    public function __construct(Twig_Environment $env)
+    {
+        parent::__construct($env);
+
+        $this->parent = false;
+
+        $this->blocks = array(
+        );
+    }
+
+    protected function doDisplay(array $context, array $blocks = array())
+    {
+        // line 1
+        echo "._gf-line, ._gf-line * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -13,7 +31,7 @@
     padding: 0 10px;
     height: 32px;
     color: #fff;
-    font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+    font-family: -apple-system, system-ui, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Helvetica Neue\", Arial, sans-serif;
     font-weight: 300;
     font-size: 12px;
 }
@@ -89,4 +107,21 @@
 
 ._gf-line__box__title {
     line-height: 32px;
+}";
+    }
+
+    public function getTemplateName()
+    {
+        return "_framework/assets/css/main.css";
+    }
+
+    public function getDebugInfo()
+    {
+        return array (  19 => 1,);
+    }
+
+    public function getSourceContext()
+    {
+        return new Twig_Source("", "_framework/assets/css/main.css", "/Applications/XAMPP/xamppfiles/htdocs/gephard/gephart-generator-edition/template/_framework/assets/css/main.css");
+    }
 }

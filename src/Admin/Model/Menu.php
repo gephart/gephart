@@ -49,13 +49,7 @@ final class Menu
 
     private function generateMenu()
     {
-        $modules = $this->module_repository->findBy(["in_menu = %1", true]);
-        foreach ($modules as $module) {
-            $this->menu[$module->getSlugSingular()] = [
-                "title" => $module->getName(),
-                "icon" => $module->getIcon()
-            ];
-        }
+        $this->generateMenuArray();
 
         $actual_link = $this->router->actualUrl();
         foreach ($this->menu as $route_name => $menu_item) {
@@ -71,6 +65,17 @@ final class Menu
             }
 
             $this->menu_list->add($item);
+        }
+    }
+
+    private function generateMenuArray()
+    {
+        $modules = $this->module_repository->findBy(["in_menu = %1", true]);
+        foreach ($modules as $module) {
+            $this->menu[$module->getSlugSingular()] = [
+                "title" => $module->getName(),
+                "icon" => $module->getIcon()
+            ];
         }
     }
 }

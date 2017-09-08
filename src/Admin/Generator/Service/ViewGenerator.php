@@ -2,6 +2,7 @@
 
 namespace Admin\Generator\Service;
 
+use Admin\Generator\Entity\Module;
 use Admin\Generator\Repository\ItemRepository;
 use Admin\Generator\Repository\ModuleRepository;
 use Gephart\Framework\Template\Engine;
@@ -56,30 +57,41 @@ class ViewGenerator
         $module = $this->module_repository->find($module_id);
         $items = $this->item_repository->findBy(["module_id = %1", $module_id], ["ORDER BY" => "id"]);
 
-        $view_index_template = $this->template_engine->render("admin/generator/template/view/index.html.twig", [
-            "module" => $module,
-            "items" => $items
-        ]);
-        $view_edit_template = $this->template_engine->render("admin/generator/template/view/edit.html.twig", [
-            "module" => $module,
-            "items" => $items
-        ]);
-
-        $filename = $module->getSlugSingular();
-
-        if (!is_dir($this->view_dir . "/" . $filename)) {
-            @mkdir($this->view_dir . "/" . $filename);
-        }
-
-        file_put_contents($this->view_dir . "/" . $filename . "/index.html.twig", $view_index_template);
-        file_put_contents($this->view_dir . "/" . $filename . "/edit.html.twig", $view_edit_template);
-
-        try {
-            @chmod($this->view_dir . "/" . $filename, 0777);
-            @chmod($this->view_dir . "/" . $filename. "/index.html.twig", 0777);
-            @chmod($this->view_dir . "/" . $filename. "/edit.html.twig", 0777);
-        } catch (\Exception $e) {}
+        $this->generateFolder($module);
+        $this->generateFile("edit", $module, $items);
+        $view_index_template = $this->generateFile("index", $module, $items);
 
         return htmlspecialchars($view_index_template);
+    }
+
+    private function generateFolder(Module $module)
+    {
+        $folder = $module->getSlugSingular();
+
+        if (!is_dir($this->view_dir . "/" . $folder)) {
+            @mkdir($this->view_dir . "/" . $folder);
+        }
+
+        try {
+            @chmod($this->view_dir . "/" . $folder, 0777);
+        } catch (\Exception $e) {}
+    }
+
+    private function generateFile(string $file, Module $module, array $items)
+    {
+        $filename = $module->getSlugSingular();
+
+        $view_template = $this->template_engine->render("admin/generator/template/view/$file.html.twig", [
+            "module" => $module,
+            "items" => $items
+        ]);
+
+        file_put_contents($this->view_dir . "/" . $filename . "/$file.html.twig", $view_template);
+
+        try {
+            @chmod($this->view_dir . "/" . $filename. "/$file.html.twig", 0777);
+        } catch (\Exception $e) {}
+
+        return $view_template;
     }
 }

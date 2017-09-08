@@ -87,14 +87,12 @@
     </style>
 </head>
 <body>
-<div style="background:#fff;position:absolute;top:0;left:0;width:100%;height:100%;">
-    <header>
-        {% block header %}{% endblock %}
-    </header>
-    <main>
-        {% block main %}{% endblock %}
-    </main>
-</div>
+<header>
+    {% block header %}{% endblock %}
+</header>
+<main>
+    {% block main %}{% endblock %}
+</main>
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/atom-one-light.min.css">
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>

@@ -79,20 +79,11 @@ class EditController
             $this->mapModuleFromRequest($module);
             $this->entity_manager->save($module);
 
-            if (is_array($this->request->post("items"))) {
-                $this->removeItems($id);
-                $items = $this->mapItemsFromRequest($id);
-                foreach($items as $item) {
-                    $this->entity_manager->save($item);
-                }
-            }
+            $this->saveItems($id);
 
-
-            $url = $this->router->generateUrl("admin_generator_edit", [
+            $this->router->redirectTo("admin_generator_edit", [
                 "id" => $id
             ]);
-            header("location: $url");
-            exit;
         }
 
         $items = $this->item_repository->findBy(["module_id = %1", $id], ["ORDER BY" => "id"]);
@@ -103,6 +94,17 @@ class EditController
             "module" => $module,
             "items" => $items
         ]);
+    }
+
+    private function saveItems(int $id)
+    {
+        if (is_array($this->request->post("items"))) {
+            $this->removeItems($id);
+            $items = $this->mapItemsFromRequest($id);
+            foreach($items as $item) {
+                $this->entity_manager->save($item);
+            }
+        }
     }
 
     private function removeItems(int $id)

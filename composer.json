@@ -12,8 +12,8 @@
     }
   ],
   "require": {
-    "php": ">=7.0",
-    "gephart/framework": "0.3.*"
+    "php": ">=7.1",
+    "gephart/framework": "0.4.*"
   },
   "autoload": {
     "psr-4": { "": "src/" },
