@@ -6,6 +6,7 @@ use Admin\Generator\Entity\Item;
 use Admin\Generator\Entity\Module;
 use Admin\Generator\Repository\ItemRepository;
 use Admin\Generator\Repository\ModuleRepository;
+use Admin\Generator\Service\StatusProvider;
 use Admin\Response\BackendTemplateResponse;
 use Gephart\ORM\EntityManager;
 use Gephart\Request\Request;
@@ -48,13 +49,19 @@ class EditController
      */
     private $item_repository;
 
+    /**
+     * @var StatusProvider
+     */
+    private $status_provider;
+
     public function __construct(
         BackendTemplateResponse $template_response,
         Router $router,
         Request $request,
         EntityManager $entity_manager,
         ModuleRepository $module_repository,
-        ItemRepository $item_repository
+        ItemRepository $item_repository,
+        StatusProvider $status_provider
     )
     {
         $this->template_response = $template_response;
@@ -63,6 +70,7 @@ class EditController
         $this->entity_manager = $entity_manager;
         $this->module_repository = $module_repository;
         $this->item_repository = $item_repository;
+        $this->status_provider = $status_provider;
     }
 
     /**
@@ -76,23 +84,30 @@ class EditController
         $module = $this->module_repository->find($id);
 
         if ($this->request->post("name")) {
-            $this->mapModuleFromRequest($module);
-            $this->entity_manager->save($module);
-
-            $this->saveItems($id);
-
-            $this->router->redirectTo("admin_generator_edit", [
-                "id" => $id
-            ]);
+            $this->saveModule($module);
         }
 
         $items = $this->item_repository->findBy(["module_id = %1", $id], ["ORDER BY" => "id"]);
         $modules = $this->module_repository->findBy();
+        $status = $this->status_provider->getModuleStatus($module);
 
         return $this->template_response->template("admin/generator/edit.html.twig", [
             "modules" => $modules,
             "module" => $module,
-            "items" => $items
+            "items" => $items,
+            "status" => $status
+        ]);
+    }
+
+    private function saveModule(Module $module)
+    {
+        $this->mapModuleFromRequest($module);
+        $this->entity_manager->save($module);
+
+        $this->saveItems($id);
+
+        $this->router->redirectTo("admin_generator_edit", [
+            "id" => $id
         ]);
     }
 

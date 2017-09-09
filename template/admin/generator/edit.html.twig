@@ -59,8 +59,21 @@
                             <div class="checkbox">
                                 <label>
                                     <input {% if module.inMenu %}checked{% endif %} type="checkbox" name="in_menu"
-                                           value="1">
+                                           value="1"
+                                    {% if not status.isAll %}disabled="disabled"{% endif %}
+                                    >
                                     Zobrazit v menu
+                                    {% if not status.isAll %}
+                                        <br/>
+                                        Musí být vygenerovány veškeré části modulu - chybí:
+                                        <ul>
+                                            {% if not status.isEntity %}<li>entita</li>{% endif %}
+                                            {% if not status.isRepository %}<li>repozitář</li>{% endif %}
+                                            {% if not status.isController %}<li>controller</li>{% endif %}
+                                            {% if not status.isTable %}<li>tabulka</li>{% endif %}
+                                            {% if not status.isView %}<li>šablony</li>{% endif %}
+                                        </ul>
+                                    {% endif %}
                                 </label>
                             </div>
 

@@ -108,4 +108,16 @@ class ModuleStatus
     {
         $this->view = $view;
     }
+
+    /**
+     * @return bool
+     */
+    public function isAll(): bool
+    {
+        return $this->isController()
+            && $this->isEntity()
+            && $this->isRepository()
+            && $this->isTable()
+            && $this->isView();
+    }
 }
