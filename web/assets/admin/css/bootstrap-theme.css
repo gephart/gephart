@@ -4,14 +4,33 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 
-.btn, .form-control, .dropdown-menu, .panel-heading, .panel,
+a {
+  color: #ceb139;
+}
+
+a:hover {
+  color: #a78a34;
+}
+
+.btn, .form-control, .dropdown-menu, .panel,
 .modal-content {
-  border-radius: 0;
-  box-shadow: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,.05);
+}
+
+.panel-default > .panel-heading {
+  background: linear-gradient(#333, #111);
+  border-color: #111;
+}
+
+.panel-default > .panel-heading .panel-title {
+  font-weight: 100;
+  color: #fff;
 }
 
 .tab-pane > .panel {
   border-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 pre {
@@ -187,6 +206,9 @@ fieldset[disabled] .btn-danger:active,
 .btn-danger[disabled].active,
 fieldset[disabled] .btn-danger.active {
   background-color: #c12e2a;
+}
+.panel-heading .btn-xs {
+  margin-top: -4px;
 }
 .thumbnail,
 .img-thumbnail {
@@ -394,10 +416,6 @@ fieldset[disabled] .btn-danger.active {
 .list-group-item.active:focus .badge {
   text-shadow: none;
 }
-.panel {
-  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
-}
 .well {
   background-image: -webkit-linear-gradient(top, #e8e8e8 0%, #f5f5f5 100%);
   background-image:      -o-linear-gradient(top, #e8e8e8 0%, #f5f5f5 100%);
@@ -435,7 +453,6 @@ body {
 }
 
 #wrap {
-  max-width: 1200px;
   position: relative;
 }
 
@@ -443,9 +460,7 @@ body {
   position: absolute;
   top: 0;
   right: 0;
-  color: #fff;
   cursor: pointer;
-  background: #333;
 }
 
 #user img {
@@ -462,29 +477,30 @@ body {
 }
 
 #menu {
-  background: #333;
-  color: #fff;
-  width: 200px;
+  background: #fff;
+  color: #111;
+  position: relative;
+  width: 270px;
+  box-shadow: 0 2px 4px rgba(0,0,0,.15);
 }
 
 #content {
-  width: calc(100% - 200px);
-  background: #fff;
+  width: calc(100% - 270px);
+  background: #fafafa;
 }
 
 #content h1 {
-  font-weight: 400;
-  font-size: 20px;
-  color: #fff;
-  background: #333;
+  font-weight: 100;
+  font-size: 26px;
   padding: 15px;
   margin: 0 -15px 16px -15px;
 }
 
 #logo {
   margin: 0 -15px;
-  background: #111;
-  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,.15);
+  background: linear-gradient(#333, #111);
+  padding: 15px 30px;
 }
 
 #logo img {
@@ -502,20 +518,37 @@ body {
   padding: 5px 10px;
 }
 
+
+#menu ul a i {
+  color: #ccc;
+}
+
 #menu ul a {
+  font-size: 16px;
+  font-weight: 100;
   display: block;
-  padding: 10px 15px;
-  color: #fff;
+  padding: 15px 20px;
+  color: #111;
+  transition: all .2s;
+  border-radius: 4px;
 }
 
 #menu ul a:hover,
+#menu ul a:focus,
+#menu ul a:active {
+  background: #fafafa;
+  text-decoration: none;
+}
+
 #menu ul a.active {
   text-decoration: none;
-  background: #222;
+  color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,.15);
+  background: linear-gradient(#333, #111);
 }
 
 #menu i {
-  width: 20px;
+  width: 26px;
 }
 
 .noselect {
@@ -526,4 +559,11 @@ body {
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
+}
+
+.table-blackhead th {
+  background: linear-gradient(#333, #111);
+  color: #fff;
+  font-weight: 100;
+  border-color: #111!important;
 }
