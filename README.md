@@ -1,4 +1,4 @@
-Gephart Generator Edition
+Gephart
 ===
 
 Dependencies
@@ -10,7 +10,7 @@ Instalation
 ---
 
 ```bash
-composer create-project gephart/generator-edition blog dev-master
+composer create-project gephart/gephart blog "0.4"
 ```
 
 Authentication
