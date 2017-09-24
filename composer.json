@@ -1,9 +1,9 @@
 {
-  "name": "gephart/generator-edition",
+  "name": "gephart/gephart",
   "type": "library",
-  "description": "Gephart Generator Edition",
+  "description": "PHP framework with code generator",
   "keywords": [],
-  "homepage": "https://github.com/gephart/generator-edition",
+  "homepage": "https://github.com/gephart/gephart",
   "license": "MIT",
   "authors": [
     {
