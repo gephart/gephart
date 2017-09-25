@@ -104,10 +104,10 @@ class EditController
         $this->mapModuleFromRequest($module);
         $this->entity_manager->save($module);
 
-        $this->saveItems($id);
+        $this->saveItems($module->getId());
 
         $this->router->redirectTo("admin_generator_edit", [
-            "id" => $id
+            "id" => $module->getId()
         ]);
     }
 
