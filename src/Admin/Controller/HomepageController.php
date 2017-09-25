@@ -17,9 +17,15 @@ class HomepageController
      */
     private $template_response;
 
-    public function __construct(BackendTemplateResponse $template_response)
+    /**
+     * @var Router
+     */
+    private $router;
+
+    public function __construct(BackendTemplateResponse $template_response, Router $router)
     {
         $this->template_response = $template_response;
+        $this->router = $router;
     }
 
     /**
@@ -31,6 +37,14 @@ class HomepageController
     public function index()
     {
         return $this->template_response->template("admin/homepage.html.twig");
+    }
+
+    /**
+     * @Route /admin
+     */
+    public function redirect()
+    {
+        $this->router->redirectTo("admin_homepage");
     }
 
 }
