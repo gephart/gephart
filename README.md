@@ -1,6 +1,8 @@
 Gephart
 ===
 
+[![Build Status](https://travis-ci.org/gephart/gephart.svg?branch=master)](https://travis-ci.org/gephart/gephart)
+
 Dependencies
 ---
  - PHP >= 7.1
