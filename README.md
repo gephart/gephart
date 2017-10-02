@@ -10,7 +10,7 @@ Instalation
 ---
 
 ```bash
-composer create-project gephart/gephart blog "0.4"
+composer create-project gephart/gephart blog "^0.4"
 ```
 
 Authentication
