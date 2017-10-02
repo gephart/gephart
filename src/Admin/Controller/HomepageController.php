@@ -46,5 +46,4 @@ class HomepageController
     {
         $this->router->redirectTo("admin_homepage");
     }
-
 }

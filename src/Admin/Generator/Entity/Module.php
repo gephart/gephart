@@ -181,5 +181,4 @@ class Module
     {
         $this->sort = $sort;
     }
-
 }

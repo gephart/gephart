@@ -15,6 +15,9 @@
     "php": ">=7.1",
     "gephart/framework": "0.4.*"
   },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "3.*"
+  },
   "autoload": {
     "psr-4": { "": "src/" },
     "exclude-from-classmap": [

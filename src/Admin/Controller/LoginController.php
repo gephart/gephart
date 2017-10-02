@@ -37,8 +37,7 @@ final class LoginController
         Router $router,
         Sessions $sessions,
         Authenticator $authenticator
-    )
-    {
+    ) {
         $this->response = $template_response;
         $this->request = $request;
         $this->router = $router;

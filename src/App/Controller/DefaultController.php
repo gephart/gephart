@@ -20,7 +20,8 @@ final class DefaultController
     /**
      * @Route /
      */
-    public function index() {
+    public function index()
+    {
         return $this->response->template("_framework/default.html.twig");
     }
 }

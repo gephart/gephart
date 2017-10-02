@@ -82,8 +82,7 @@ class AjaxController
         RepositoryGenerator $repository_generator,
         ViewGenerator $view_generator,
         SQLBuilder $sql_builder
-    )
-    {
+    ) {
         $this->template_response = $template_response;
         $this->request = $request;
         $this->module_repository = $module_repository;
@@ -139,7 +138,6 @@ class AjaxController
         $this->entity_manager->syncTable("App\\Entity\\".$module->getEntityName());
 
         return $sql;
-
     }
 
     /**
@@ -234,5 +232,4 @@ class AjaxController
 
         return new ResponseJson(["sorted" => $sort]);
     }
-
 }

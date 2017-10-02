@@ -25,7 +25,8 @@ class ModuleRepository
 
         try {
             $this->entity_manager->syncTable($this->entity_class);
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
     }
 
     public function findBy(array $find_by = [], array $params = [])
@@ -47,5 +48,4 @@ class ModuleRepository
 
         return null;
     }
-
 }
