@@ -62,8 +62,7 @@ class EditController
         ModuleRepository $module_repository,
         ItemRepository $item_repository,
         StatusProvider $status_provider
-    )
-    {
+    ) {
         $this->template_response = $template_response;
         $this->router = $router;
         $this->request = $request;
@@ -158,5 +157,4 @@ class EditController
 
         return $items;
     }
-
 }

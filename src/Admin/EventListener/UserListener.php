@@ -15,7 +15,7 @@ class UserListener
      */
     private $authenticator;
 
-    public function __construct(EventManager $event_manager,  Authenticator $authenticator)
+    public function __construct(EventManager $event_manager, Authenticator $authenticator)
     {
         $this->authenticator = $authenticator;
 

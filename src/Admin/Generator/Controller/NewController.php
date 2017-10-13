@@ -40,9 +40,7 @@ class NewController
         Router $router,
         ServerRequestInterface $request,
         EntityManager $entity_manager
-
-    )
-    {
+    ) {
         $this->template_response = $template_response;
         $this->router = $router;
         $this->request = $request;
@@ -73,10 +71,10 @@ class NewController
         return $this->template_response->createResponse("admin/generator/new.html.twig");
     }
 
-    private function mapEntityFromArray(Module $module, array $data) {
+    private function mapEntityFromArray(Module $module, array $data)
+    {
         $module->setName($data["name"]);
         $module->setSlugPlural($data["slug_plural"]);
         $module->setSlugSingular($data["slug_singular"]);
     }
-
 }

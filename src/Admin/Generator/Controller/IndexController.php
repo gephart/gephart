@@ -32,8 +32,7 @@ class IndexController
         AdminResponseFactory $template_response,
         ModuleRepository $module_repository,
         StatusProvider $status_provider
-    )
-    {
+    ) {
         $this->template_response = $template_response;
         $this->module_repository = $module_repository;
         $this->status_provider = $status_provider;
@@ -55,5 +54,4 @@ class IndexController
             "modules_status" => $modules_status
         ]);
     }
-
 }

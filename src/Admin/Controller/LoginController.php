@@ -30,8 +30,7 @@ final class LoginController
         ServerRequestInterface $request,
         Router $router,
         Authenticator $authenticator
-    )
-    {
+    ) {
         $this->request = $request;
         $this->router = $router;
         $this->authenticator = $authenticator;

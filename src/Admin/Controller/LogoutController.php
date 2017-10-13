@@ -22,8 +22,7 @@ final class LogoutController
     public function __construct(
         Router $router,
         Authenticator $authenticator
-    )
-    {
+    ) {
         $this->router = $router;
         $this->authenticator = $authenticator;
     }

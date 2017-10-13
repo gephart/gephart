@@ -31,5 +31,4 @@ class JavaScriptController
     {
         return $this->template_response->createResponse("admin/generator/js/index.js.twig");
     }
-
 }

@@ -55,8 +55,7 @@ class DeleteController
         EntityManager $entity_manager,
         ModuleRepository $module_repository,
         ItemRepository $item_repository
-    )
-    {
+    ) {
         $this->template_response = $template_response;
         $this->router = $router;
         $this->request = $request;
@@ -89,5 +88,4 @@ class DeleteController
             $this->entity_manager->remove($item);
         }
     }
-
 }

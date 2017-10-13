@@ -6,13 +6,13 @@ Gephart
 Dependencies
 ---
  - PHP >= 7.1
- - gephart/framework >= 0.4
+ - gephart/framework >= 0.5
 
 Instalation
 ---
 
 ```bash
-composer create-project gephart/gephart blog "^0.4"
+composer create-project gephart/gephart blog "^0.5"
 ```
 
 Authentication
