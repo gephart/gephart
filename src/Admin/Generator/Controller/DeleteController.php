@@ -2,13 +2,9 @@
 
 namespace Admin\Generator\Controller;
 
-use Admin\Generator\Entity\Item;
-use Admin\Generator\Entity\Module;
 use Admin\Generator\Repository\ItemRepository;
 use Admin\Generator\Repository\ModuleRepository;
-use Admin\Response\BackendTemplateResponse;
 use Gephart\ORM\EntityManager;
-use Gephart\Request\Request;
 use Gephart\Routing\Router;
 
 /**
@@ -19,19 +15,9 @@ class DeleteController
 {
 
     /**
-     * @var BackendTemplateResponse
-     */
-    private $template_response;
-
-    /**
      * @var Router
      */
     private $router;
-
-    /**
-     * @var Request
-     */
-    private $request;
 
     /**
      * @var EntityManager
@@ -49,16 +35,12 @@ class DeleteController
     private $item_repository;
 
     public function __construct(
-        BackendTemplateResponse $template_response,
         Router $router,
-        Request $request,
         EntityManager $entity_manager,
         ModuleRepository $module_repository,
         ItemRepository $item_repository
     ) {
-        $this->template_response = $template_response;
         $this->router = $router;
-        $this->request = $request;
         $this->entity_manager = $entity_manager;
         $this->module_repository = $module_repository;
         $this->item_repository = $item_repository;
@@ -76,9 +58,7 @@ class DeleteController
         $this->removeItems($id);
         $this->entity_manager->remove($module);
 
-        $url = $this->router->generateUrl("admin_generator");
-        header("location: $url");
-        exit;
+        $this->router->redirectTo("admin_generator");
     }
 
     private function removeItems(int $id)
