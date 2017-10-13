@@ -4,8 +4,8 @@ namespace Admin\Generator\Controller;
 
 use Admin\Generator\Repository\ItemRepository;
 use Admin\Generator\Repository\ModuleRepository;
-use Gephart\ORM\EntityManager;
-use Gephart\Routing\Router;
+use Gephart\Framework\Facade\EntityManager;
+use Gephart\Framework\Facade\Router;
 
 /**
  * @Security ROLE_ADMIN
@@ -13,16 +13,6 @@ use Gephart\Routing\Router;
  */
 class DeleteController
 {
-
-    /**
-     * @var Router
-     */
-    private $router;
-
-    /**
-     * @var EntityManager
-     */
-    private $entity_manager;
 
     /**
      * @var ModuleRepository
@@ -35,13 +25,9 @@ class DeleteController
     private $item_repository;
 
     public function __construct(
-        Router $router,
-        EntityManager $entity_manager,
         ModuleRepository $module_repository,
         ItemRepository $item_repository
     ) {
-        $this->router = $router;
-        $this->entity_manager = $entity_manager;
         $this->module_repository = $module_repository;
         $this->item_repository = $item_repository;
     }
@@ -58,14 +44,14 @@ class DeleteController
         $this->removeItems($id);
         $this->entity_manager->remove($module);
 
-        $this->router->redirectTo("admin_generator");
+        Router::redirectTo("admin_generator");
     }
 
     private function removeItems(int $id)
     {
         $items = $this->item_repository->findBy(["module_id = %1", $id], ["ORDER BY" => "id"]);
         foreach ($items as $item) {
-            $this->entity_manager->remove($item);
+            EntityManager::remove($item);
         }
     }
 }

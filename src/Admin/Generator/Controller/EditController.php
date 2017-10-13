@@ -2,15 +2,15 @@
 
 namespace Admin\Generator\Controller;
 
+use Admin\Facade\AdminResponse;
 use Admin\Generator\Entity\Item;
 use Admin\Generator\Entity\Module;
 use Admin\Generator\Repository\ItemRepository;
 use Admin\Generator\Repository\ModuleRepository;
 use Admin\Generator\Service\StatusProvider;
-use Admin\Response\AdminResponseFactory;
-use Gephart\ORM\EntityManager;
-use Gephart\Routing\Router;
-use Psr\Http\Message\ServerRequestInterface;
+use Gephart\Framework\Facade\EntityManager;
+use Gephart\Framework\Facade\Request;
+use Gephart\Framework\Facade\Router;
 
 /**
  * @Security ROLE_ADMIN
@@ -18,27 +18,6 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 class EditController
 {
-
-    /**
-     * @var AdminResponseFactory
-     */
-    private $template_response;
-
-    /**
-     * @var Router
-     */
-    private $router;
-
-    /**
-     * @var ServerRequestInterface
-     */
-    private $request;
-
-    /**
-     * @var EntityManager
-     */
-    private $entity_manager;
-
     /**
      * @var ModuleRepository
      */
@@ -55,18 +34,10 @@ class EditController
     private $status_provider;
 
     public function __construct(
-        AdminResponseFactory $template_response,
-        Router $router,
-        ServerRequestInterface $request,
-        EntityManager $entity_manager,
         ModuleRepository $module_repository,
         ItemRepository $item_repository,
         StatusProvider $status_provider
     ) {
-        $this->template_response = $template_response;
-        $this->router = $router;
-        $this->request = $request;
-        $this->entity_manager = $entity_manager;
         $this->module_repository = $module_repository;
         $this->item_repository = $item_repository;
         $this->status_provider = $status_provider;
@@ -82,7 +53,7 @@ class EditController
     {
         $module = $this->module_repository->find($id);
 
-        $postData = $this->request->getParsedBody();
+        $postData = Request::getParsedBody();
 
         if (!empty($postData["name"])) {
             $this->saveModule($module, $postData);
@@ -92,7 +63,7 @@ class EditController
         $modules = $this->module_repository->findBy();
         $status = $this->status_provider->getModuleStatus($module);
 
-        return $this->template_response->createResponse("admin/generator/edit.html.twig", [
+        return AdminResponse::createResponse("admin/generator/edit.html.twig", [
             "modules" => $modules,
             "module" => $module,
             "items" => $items,
@@ -103,11 +74,11 @@ class EditController
     private function saveModule(Module $module, array $data)
     {
         $this->mapModuleFromArray($module, $data);
-        $this->entity_manager->save($module);
+        EntityManager::save($module);
 
         $this->saveItems($module->getId(), $data);
 
-        $this->router->redirectTo("admin_generator_edit", [
+        Router::redirectTo("admin_generator_edit", [
             "id" => $module->getId()
         ]);
     }
@@ -118,7 +89,7 @@ class EditController
             $this->removeItems($id);
             $items = $this->mapItemsFromArray($id, $data);
             foreach ($items as $item) {
-                $this->entity_manager->save($item);
+                EntityManager::save($item);
             }
         }
     }
@@ -127,7 +98,7 @@ class EditController
     {
         $items = $this->item_repository->findBy(["module_id = %1", $id], ["ORDER BY" => "id"]);
         foreach ($items as $item) {
-            $this->entity_manager->remove($item);
+            EntityManager::remove($item);
         }
     }
 

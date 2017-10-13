@@ -2,7 +2,7 @@
 
 namespace Admin\Generator\Controller;
 
-use Gephart\Framework\Response\TemplateResponseFactory;
+use Gephart\Framework\Facade\Response;
 
 /**
  * @Security ROLE_ADMIN
@@ -10,17 +10,6 @@ use Gephart\Framework\Response\TemplateResponseFactory;
  */
 class JavaScriptController
 {
-
-    /**
-     * @var TemplateResponseFactory
-     */
-    private $template_response;
-
-    public function __construct(TemplateResponseFactory $template_response)
-    {
-        $this->template_response = $template_response;
-    }
-
     /**
      * @Route {
      *  "rule": "/generator.js",
@@ -29,6 +18,6 @@ class JavaScriptController
      */
     public function index()
     {
-        return $this->template_response->createResponse("admin/generator/js/index.js.twig");
+        return Response::template("admin/generator/js/index.js.twig");
     }
 }

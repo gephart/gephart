@@ -2,17 +2,11 @@
 
 namespace Admin\Controller;
 
-use Gephart\Routing\Exception\NotFoundRouteException;
-use Gephart\Routing\Router;
+use Gephart\Framework\Facade\Router;
 use Gephart\Security\Authenticator\Authenticator;
 
 final class LogoutController
 {
-
-    /**
-     * @var Router
-     */
-    private $router;
 
     /**
      * @var Authenticator
@@ -20,10 +14,8 @@ final class LogoutController
     private $authenticator;
 
     public function __construct(
-        Router $router,
         Authenticator $authenticator
     ) {
-        $this->router = $router;
         $this->authenticator = $authenticator;
     }
 
@@ -38,14 +30,9 @@ final class LogoutController
         $this->authenticator->unauthorise();
 
         try {
-            $url = $this->router->generateUrl("homepage");
-        } catch (NotFoundRouteException $exception) {
-            $url = $this->router->generateUrl("app\controller\defaultcontroller_index");
+            Router::redirectTo("homepage");
         } catch (\Exception $exception) {
-            $url = "/";
+            Router::redirectTo("app\controller\defaultcontroller_index");
         }
-
-        header("location: $url");
-        exit;
     }
 }

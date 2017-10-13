@@ -2,11 +2,11 @@
 
 namespace Admin\Generator\Controller;
 
+use Admin\Facade\AdminResponse;
 use Admin\Generator\Entity\Module;
-use Admin\Response\AdminResponseFactory;
-use Gephart\ORM\EntityManager;
-use Gephart\Routing\Router;
-use Psr\Http\Message\ServerRequestInterface;
+use Gephart\Framework\Facade\EntityManager;
+use Gephart\Framework\Facade\Request;
+use Gephart\Framework\Facade\Router;
 
 /**
  * @Security ROLE_ADMIN
@@ -14,39 +14,6 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 class NewController
 {
-
-    /**
-     * @var AdminResponseFactory
-     */
-    private $template_response;
-
-    /**
-     * @var Router
-     */
-    private $router;
-
-    /**
-     * @var ServerRequestInterface
-     */
-    private $request;
-
-    /**
-     * @var EntityManager
-     */
-    private $entity_manager;
-
-    public function __construct(
-        AdminResponseFactory $template_response,
-        Router $router,
-        ServerRequestInterface $request,
-        EntityManager $entity_manager
-    ) {
-        $this->template_response = $template_response;
-        $this->router = $router;
-        $this->request = $request;
-        $this->entity_manager = $entity_manager;
-    }
-
     /**
      * @Route {
      *  "rule": "/new",
@@ -55,20 +22,20 @@ class NewController
      */
     public function index()
     {
-        $postData = $this->request->getParsedBody();
+        $postData = Request::getParsedBody();
 
         if (!empty($postData["name"])) {
             $module = new Module();
             $this->mapEntityFromArray($module, $postData);
 
-            $this->entity_manager->save($module);
+            EntityManager::save($module);
 
-            $this->router->redirectTo("admin_generator_edit", [
+            Router::redirectTo("admin_generator_edit", [
                 "id" => $module->getId()
             ]);
         }
 
-        return $this->template_response->createResponse("admin/generator/new.html.twig");
+        return AdminResponse::createResponse("admin/generator/new.html.twig");
     }
 
     private function mapEntityFromArray(Module $module, array $data)
