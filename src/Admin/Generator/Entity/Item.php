@@ -150,4 +150,5 @@ class Item
         $repository = __DIR__ . "/../../../App/Repository/" . $this->getType() . "Repository.php";
         return file_exists($repository);
     }
+
 }

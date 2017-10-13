@@ -2,14 +2,15 @@
 
 namespace Admin\Controller;
 
-use Admin\Response\BackendTemplateResponse;
+use Admin\Response\AdminResponseFactory;
 use App\Entity\{{ module.entityName }};
 {% for entity in entities %}
 use App\Repository\{{ entity }}Repository;
 {% endfor %}
 use Gephart\ORM\EntityManager;
-use Gephart\Request\Request;
 use Gephart\Routing\Router;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\UploadedFileInterface;
 
 /**
  * @Security ROLE_ADMIN
@@ -24,12 +25,12 @@ class {{ module.entityName }}Controller
     private $router;
 
     /**
-     * @var BackendTemplateResponse
+     * @var AdminResponseFactory
      */
     private $template_response;
 
     /**
-     * @var Request
+     * @var ServerRequestInterface
      */
     private $request;
 
@@ -52,8 +53,8 @@ class {{ module.entityName }}Controller
 
     public function __construct(
         Router $router,
-        BackendTemplateResponse $template_response,
-        Request $request,
+        AdminResponseFactory $template_response,
+        ServerRequestInterface $request,
         EntityManager $entity_manager,
 {% for item in items if item.isRelation and item.slug != module.slugSingular %}
         {{ item.type }}Repository ${{ item.slug }}_repository,
@@ -79,15 +80,16 @@ class {{ module.entityName }}Controller
      */
     public function index()
     {
-        if ($this->request->post("{{ items[0].slug }}")) {
+        $postData = $this->request->getParsedBody();
+        $filesData = $this->request->getUploadedFiles();
+
+        if (!empty($postData["{{ items[0].slug }}"])) {
             ${{ module.slugSingular }} = new {{ module.entityName }}();
-            $this->mapEntityFromRequest(${{ module.slugSingular }});
+            $this->mapEntityFromArray(${{ module.slugSingular }}, $postData, $filesData);
 
             $this->entity_manager->save(${{ module.slugSingular }});
 
-            $url = $this->router->generateUrl("admin_{{ module.slugSingular }}");
-            header("location: $url");
-            exit;
+            $this->router->redirectTo("admin_{{ module.slugSingular }}");
         }
 
 {% for item in items if item.isRelation %}
@@ -97,7 +99,7 @@ class {{ module.entityName }}Controller
             "ORDER BY" => "id DESC"
         ]);
 
-        return $this->template_response->template("admin/{{ module.slugSingular }}/index.html.twig", [
+        return $this->template_response->createResponse("admin/{{ module.slugSingular }}/index.html.twig", [
 {% for item in items if item.isRelation %}
             "{{ item.slugPlural }}" => ${{ item.slugPlural }},
 {% endfor %}
@@ -113,15 +115,16 @@ class {{ module.entityName }}Controller
      */
     public function edit($id)
     {
-        if ($this->request->post("{{ items[0].slug }}")) {
+        $postData = $this->request->getParsedBody();
+        $filesData = $this->request->getUploadedFiles();
+
+        if (!empty($postData["{{ items[0].slug }}"])) {
             ${{ module.slugSingular }} = $this->{{ module.slugSingular }}_repository->find($id);
-            $this->mapEntityFromRequest(${{ module.slugSingular }});
+            $this->mapEntityFromArray(${{ module.slugSingular }}, $postData, $filesData);
 
             $this->entity_manager->save(${{ module.slugSingular }});
 
-            $url = $this->router->generateUrl("admin_{{ module.slugSingular }}_edit", ["id"=>${{ module.slugSingular }}->getId()]);
-            header("location: $url");
-            exit;
+            $this->router->redirectTo("admin_{{ module.slugSingular }}_edit", ["id"=>${{ module.slugSingular }}->getId()]);
         }
 
 {% for item in items if item.isRelation %}
@@ -129,7 +132,7 @@ class {{ module.entityName }}Controller
 {% endfor %}
         ${{ module.slugSingular }} = $this->{{ module.slugSingular }}_repository->find($id);
 
-        return $this->template_response->template("admin/{{ module.slugSingular }}/edit.html.twig", [
+        return $this->template_response->createResponse("admin/{{ module.slugSingular }}/edit.html.twig", [
 {% for item in items if item.isRelation %}
             "{{ item.slugPlural }}" => ${{ item.slugPlural }},
 {% endfor %}
@@ -148,24 +151,24 @@ class {{ module.entityName }}Controller
         ${{ module.slugSingular }} = $this->{{ module.slugSingular }}_repository->find($id);
         $this->entity_manager->remove(${{ module.slugSingular }});
 
-        $url = $this->router->generateUrl("admin_{{ module.slugSingular }}");
-        header("location: $url");
-        exit;
+        $this->router->redirectTo("admin_{{ module.slugSingular }}");
     }
 
-    private function mapEntityFromRequest({{ module.entityName }} ${{ module.slugSingular }}) {
+    private function mapEntityFromArray({{ module.entityName }} ${{ module.slugSingular }}, array $data, array $files) {
 {% for item in items %}
 {% if item.type == "date" %}
-        ${{ module.slugSingular }}->set{{ item.slugInCamel }}(new \DateTime($this->request->post("{{ item.slug }}")));
+        ${{ module.slugSingular }}->set{{ item.slugInCamel }}(new \DateTime($data["{{ item.slug }}"]));
 {% elseif item.type == "file" or item.type == "image" %}
-        if (!empty($_FILES["{{ item.slug }}"]) && !empty($_FILES["{{ item.slug }}"]["tmp_name"])) {
-            ${{ module.slugSingular }}->set{{ item.slugInCamel }}($this->uploadFile($_FILES["{{ item.slug }}"]));
+        if (!empty($files["{{ item.slug }}"]) && $files["{{ item.slug }}"] instanceof UploadedFileInterface) {
+            ${{ module.slugSingular }}->set{{ item.slugInCamel }}($this->uploadFile($files["{{ item.slug }}"]));
         }
-        if ($this->request->post("{{ item.slug }}_delete")) {
+        if (isset($data["{{ item.slug }}_delete"])) {
             ${{ module.slugSingular }}->set{{ item.slugInCamel }}("");
         }
+{% elseif item.type == "bool" %}
+        ${{ module.slugSingular }}->set{{ item.slugInCamel }}((bool) isset($data["{{ item.slug }}"])?$data["{{ item.slug }}"]:false);
 {% else %}
-        ${{ module.slugSingular }}->set{{ item.slugInCamel }}($this->request->post("{{ item.slug }}"));
+        ${{ module.slugSingular }}->set{{ item.slugInCamel }}($data["{{ item.slug }}"]);
 {% endif %}
 {% endfor %}
     }
@@ -173,12 +176,13 @@ class {{ module.entityName }}Controller
 {% set break = false %}
 {% for item in items if not break %}
 {% if item.type == "file" or item.type == "image" %}
-    private function uploadFile(array $file): string
+    private function uploadFile(UploadedFileInterface $file): string
     {
-        $filename = md5($file["name"].time()) . "." . substr($file["name"], -4);
+        $client_filename = $file->getClientFilename();
+        $filename = md5($client_filename.time()) . "." . substr($client_filename, -4);
         $dir1 = substr($filename, 0, 2);
         $dir2 = substr($filename, 2, 2);
-        $upload_dir = __DIR__ . "/../../../../web/upload";
+        $upload_dir = __DIR__ . "/../../../web/upload";
         $target = $upload_dir . "/" . $dir1 . "/" . $dir2 . "/" . $filename;
 
         if (!is_dir($upload_dir . "/" . $dir1)) {
@@ -191,7 +195,7 @@ class {{ module.entityName }}Controller
             @chmod($upload_dir . "/" . $dir1 . "/" . $dir2, 0777);
         }
 
-        if (move_uploaded_file($file["tmp_name"], $target)) {
+        if ($file->moveTo($target)) {
             @chmod($target, 0777);
             return $dir1 . "/" . $dir2 . "/" . $filename;
         }

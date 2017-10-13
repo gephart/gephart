@@ -2,9 +2,8 @@
 
 namespace Admin\Controller;
 
-use Admin\Response\BackendTemplateResponse;
+use Admin\Response\AdminResponseFactory;
 use Gephart\Routing\Router;
-use Gephart\Sessions\Sessions;
 
 /**
  * @Security ROLE_ADMIN
@@ -13,18 +12,18 @@ class HomepageController
 {
 
     /**
-     * @var BackendTemplateResponse
+     * @var AdminResponseFactory
      */
-    private $template_response;
+    private $responseFactory;
 
     /**
      * @var Router
      */
     private $router;
 
-    public function __construct(BackendTemplateResponse $template_response, Router $router)
+    public function __construct(AdminResponseFactory $responseFactory, Router $router)
     {
-        $this->template_response = $template_response;
+        $this->responseFactory = $responseFactory;
         $this->router = $router;
     }
 
@@ -36,7 +35,7 @@ class HomepageController
      */
     public function index()
     {
-        return $this->template_response->template("admin/homepage.html.twig");
+        return $this->responseFactory->createResponse("admin/homepage.html.twig");
     }
 
     /**
@@ -46,4 +45,5 @@ class HomepageController
     {
         $this->router->redirectTo("admin_homepage");
     }
+
 }

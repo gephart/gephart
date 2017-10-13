@@ -7,10 +7,10 @@ use Admin\Generator\Entity\Module;
 use Admin\Generator\Repository\ItemRepository;
 use Admin\Generator\Repository\ModuleRepository;
 use Admin\Generator\Service\StatusProvider;
-use Admin\Response\BackendTemplateResponse;
+use Admin\Response\AdminResponseFactory;
 use Gephart\ORM\EntityManager;
-use Gephart\Request\Request;
 use Gephart\Routing\Router;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * @Security ROLE_ADMIN
@@ -20,7 +20,7 @@ class EditController
 {
 
     /**
-     * @var BackendTemplateResponse
+     * @var AdminResponseFactory
      */
     private $template_response;
 
@@ -30,7 +30,7 @@ class EditController
     private $router;
 
     /**
-     * @var Request
+     * @var ServerRequestInterface
      */
     private $request;
 
@@ -55,14 +55,15 @@ class EditController
     private $status_provider;
 
     public function __construct(
-        BackendTemplateResponse $template_response,
+        AdminResponseFactory $template_response,
         Router $router,
-        Request $request,
+        ServerRequestInterface $request,
         EntityManager $entity_manager,
         ModuleRepository $module_repository,
         ItemRepository $item_repository,
         StatusProvider $status_provider
-    ) {
+    )
+    {
         $this->template_response = $template_response;
         $this->router = $router;
         $this->request = $request;
@@ -82,15 +83,17 @@ class EditController
     {
         $module = $this->module_repository->find($id);
 
-        if ($this->request->post("name")) {
-            $this->saveModule($module);
+        $postData = $this->request->getParsedBody();
+
+        if (!empty($postData["name"])) {
+            $this->saveModule($module, $postData);
         }
 
         $items = $this->item_repository->findBy(["module_id = %1", $id], ["ORDER BY" => "id"]);
         $modules = $this->module_repository->findBy();
         $status = $this->status_provider->getModuleStatus($module);
 
-        return $this->template_response->template("admin/generator/edit.html.twig", [
+        return $this->template_response->createResponse("admin/generator/edit.html.twig", [
             "modules" => $modules,
             "module" => $module,
             "items" => $items,
@@ -98,23 +101,23 @@ class EditController
         ]);
     }
 
-    private function saveModule(Module $module)
+    private function saveModule(Module $module, array $data)
     {
-        $this->mapModuleFromRequest($module);
+        $this->mapModuleFromArray($module, $data);
         $this->entity_manager->save($module);
 
-        $this->saveItems($module->getId());
+        $this->saveItems($module->getId(), $data);
 
         $this->router->redirectTo("admin_generator_edit", [
             "id" => $module->getId()
         ]);
     }
 
-    private function saveItems(int $id)
+    private function saveItems(int $id, array $data)
     {
-        if (is_array($this->request->post("items"))) {
+        if (is_array($data["items"])) {
             $this->removeItems($id);
-            $items = $this->mapItemsFromRequest($id);
+            $items = $this->mapItemsFromArray($id, $data);
             foreach ($items as $item) {
                 $this->entity_manager->save($item);
             }
@@ -129,20 +132,20 @@ class EditController
         }
     }
 
-    private function mapModuleFromRequest(Module $module)
+    private function mapModuleFromArray(Module $module, array $data)
     {
-        $module->setName($this->request->post("name"));
-        $module->setSlugPlural($this->request->post("slug_plural"));
-        $module->setSlugSingular($this->request->post("slug_singular"));
-        $module->setInMenu((bool) $this->request->post("in_menu"));
-        $module->setIcon($this->request->post("icon"));
+        $module->setName($data["name"]);
+        $module->setSlugPlural($data["slug_plural"]);
+        $module->setSlugSingular($data["slug_singular"]);
+        $module->setInMenu((bool)isset($data["in_menu"]) ? $data["in_menu"] : false);
+        $module->setIcon($data["icon"]);
     }
 
-    private function mapItemsFromRequest(int $id): array
+    private function mapItemsFromArray(int $id, array $data): array
     {
         $items = [];
 
-        $items_data = $this->request->post("items");
+        $items_data = $data["items"];
         foreach ($items_data as $item_data) {
             $item = new Item();
             $item->setName($item_data["name"]);
@@ -155,4 +158,5 @@ class EditController
 
         return $items;
     }
+
 }

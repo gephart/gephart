@@ -13,7 +13,7 @@
   ],
   "require": {
     "php": ">=7.1",
-    "gephart/framework": "0.4.*"
+    "gephart/framework": "0.5.*"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "3.*"

@@ -36,7 +36,8 @@ class ControllerGenerator
         ModuleRepository $module_repository,
         ItemRepository $item_repository,
         Engine $template_engine
-    ) {
+    )
+    {
         $this->entity_manager = $entity_manager;
         $this->module_repository = $module_repository;
         $this->item_repository = $item_repository;
@@ -70,14 +71,12 @@ class ControllerGenerator
 
         try {
             @chmod($this->controller_dir . "/" . $filename, 0777);
-        } catch (\Exception $e) {
-        }
+        } catch (\Exception $e) {}
 
         return htmlspecialchars($entity_template);
     }
 
-    private function getEntities(Module $module, $items)
-    {
+    private function getEntities(Module $module, $items) {
         $entities = [$module->getEntityName()];
 
         /** @var Item $item */

@@ -2,24 +2,13 @@
 
 namespace Admin\Controller;
 
-use Gephart\Framework\Response\TemplateResponse;
-use Gephart\Request\Request;
+use Admin\Response\AdminResponseFactory;
 use Gephart\Routing\Router;
 use Gephart\Security\Authenticator\Authenticator;
-use Gephart\Sessions\Sessions;
+use Psr\Http\Message\ServerRequestInterface;
 
 final class LoginController
 {
-
-    /**
-     * @var TemplateResponse
-     */
-    private $response;
-
-    /**
-     * @var Request
-     */
-    private $request;
 
     /**
      * @var Router
@@ -31,17 +20,22 @@ final class LoginController
      */
     private $authenticator;
 
+    /**
+     * @var AdminResponseFactory
+     */
+    private $responseFactory;
+
     public function __construct(
-        TemplateResponse $template_response,
-        Request $request,
+        AdminResponseFactory $responseFactory,
+        ServerRequestInterface $request,
         Router $router,
-        Sessions $sessions,
         Authenticator $authenticator
-    ) {
-        $this->response = $template_response;
+    )
+    {
         $this->request = $request;
         $this->router = $router;
         $this->authenticator = $authenticator;
+        $this->responseFactory = $responseFactory;
     }
 
     /**
@@ -49,19 +43,20 @@ final class LoginController
      *  "rule": "/login",
      *  "name": "admin_login"
      * }
+     * @return \Gephart\Http\Response
      */
     public function index()
     {
-        if ($this->request->post("email") && $this->request->post("password")) {
-            $email = $this->request->post("email");
-            $password = $this->request->post("password");
+        $postData = $this->request->getParsedBody();
+
+        if (!empty($postData["email"]) && !empty($postData["password"])) {
+            $email = $postData["email"];
+            $password = $postData["password"];
             if ($this->authenticator->authorise($email, $password)) {
-                $url = $this->router->generateUrl("admin_homepage");
-                header("location: $url");
-                exit;
+                $this->router->redirectTo("admin_homepage");
             }
         }
 
-        return $this->response->template("admin/login.html.twig");
+        return $this->responseFactory->createResponse("admin/login.html.twig");
     }
 }

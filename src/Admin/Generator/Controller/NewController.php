@@ -3,10 +3,10 @@
 namespace Admin\Generator\Controller;
 
 use Admin\Generator\Entity\Module;
-use Admin\Response\BackendTemplateResponse;
+use Admin\Response\AdminResponseFactory;
 use Gephart\ORM\EntityManager;
-use Gephart\Request\Request;
 use Gephart\Routing\Router;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * @Security ROLE_ADMIN
@@ -16,7 +16,7 @@ class NewController
 {
 
     /**
-     * @var BackendTemplateResponse
+     * @var AdminResponseFactory
      */
     private $template_response;
 
@@ -26,7 +26,7 @@ class NewController
     private $router;
 
     /**
-     * @var Request
+     * @var ServerRequestInterface
      */
     private $request;
 
@@ -36,11 +36,13 @@ class NewController
     private $entity_manager;
 
     public function __construct(
-        BackendTemplateResponse $template_response,
+        AdminResponseFactory $template_response,
         Router $router,
-        Request $request,
+        ServerRequestInterface $request,
         EntityManager $entity_manager
-    ) {
+
+    )
+    {
         $this->template_response = $template_response;
         $this->router = $router;
         $this->request = $request;
@@ -55,26 +57,26 @@ class NewController
      */
     public function index()
     {
-        if ($this->request->post("name")) {
+        $postData = $this->request->getParsedBody();
+
+        if (!empty($postData["name"])) {
             $module = new Module();
-            $this->mapEntityFromRequest($module);
+            $this->mapEntityFromArray($module, $postData);
 
             $this->entity_manager->save($module);
 
-            $url = $this->router->generateUrl("admin_generator_edit", [
+            $this->router->redirectTo("admin_generator_edit", [
                 "id" => $module->getId()
             ]);
-            header("location: $url");
-            exit;
         }
 
-        return $this->template_response->template("admin/generator/new.html.twig");
+        return $this->template_response->createResponse("admin/generator/new.html.twig");
     }
 
-    private function mapEntityFromRequest(Module $module)
-    {
-        $module->setName($this->request->post("name"));
-        $module->setSlugPlural($this->request->post("slug_plural"));
-        $module->setSlugSingular($this->request->post("slug_singular"));
+    private function mapEntityFromArray(Module $module, array $data) {
+        $module->setName($data["name"]);
+        $module->setSlugPlural($data["slug_plural"]);
+        $module->setSlugSingular($data["slug_singular"]);
     }
+
 }

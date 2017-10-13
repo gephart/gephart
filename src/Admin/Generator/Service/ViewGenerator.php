@@ -35,7 +35,8 @@ class ViewGenerator
         ModuleRepository $module_repository,
         ItemRepository $item_repository,
         Engine $template_engine
-    ) {
+    )
+    {
         $this->entity_manager = $entity_manager;
         $this->module_repository = $module_repository;
         $this->item_repository = $item_repository;
@@ -73,8 +74,7 @@ class ViewGenerator
 
         try {
             @chmod($this->view_dir . "/" . $folder, 0777);
-        } catch (\Exception $e) {
-        }
+        } catch (\Exception $e) {}
     }
 
     private function generateFile(string $file, Module $module, array $items)
@@ -90,8 +90,7 @@ class ViewGenerator
 
         try {
             @chmod($this->view_dir . "/" . $filename. "/$file.html.twig", 0777);
-        } catch (\Exception $e) {
-        }
+        } catch (\Exception $e) {}
 
         return $view_template;
     }

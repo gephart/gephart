@@ -34,7 +34,8 @@ class EntityGenerator
         ModuleRepository $module_repository,
         ItemRepository $item_repository,
         Engine $template_engine
-    ) {
+    )
+    {
         $this->entity_manager = $entity_manager;
         $this->module_repository = $module_repository;
         $this->item_repository = $item_repository;
@@ -65,8 +66,7 @@ class EntityGenerator
 
         try {
             @chmod($this->entity_dir . "/" . $filename, 0777);
-        } catch (\Exception $e) {
-        }
+        } catch (\Exception $e) {}
 
         return htmlspecialchars($entity_template);
     }

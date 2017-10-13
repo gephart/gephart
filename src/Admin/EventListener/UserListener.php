@@ -2,8 +2,7 @@
 
 namespace Admin\EventListener;
 
-use Admin\Model\Menu;
-use Admin\Response\BackendTemplateResponse;
+use Admin\Response\AdminResponseFactory;
 use Gephart\EventManager\Event;
 use Gephart\EventManager\EventManager;
 use Gephart\Security\Authenticator\Authenticator;
@@ -16,11 +15,11 @@ class UserListener
      */
     private $authenticator;
 
-    public function __construct(EventManager $event_manager, Authenticator $authenticator)
+    public function __construct(EventManager $event_manager,  Authenticator $authenticator)
     {
         $this->authenticator = $authenticator;
 
-        $event_manager->attach(BackendTemplateResponse::DATA_TRANSMIT_EVENT, [$this, "dataPrepend"]);
+        $event_manager->attach(AdminResponseFactory::DATA_TRANSMIT_EVENT, [$this, "dataPrepend"]);
     }
 
     public function dataPrepend(Event $event)

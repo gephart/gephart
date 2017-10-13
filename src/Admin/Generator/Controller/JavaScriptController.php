@@ -2,8 +2,7 @@
 
 namespace Admin\Generator\Controller;
 
-use Admin\Generator\Repository\ModuleRepository;
-use Gephart\Framework\Response\TemplateResponse;
+use Gephart\Framework\Response\TemplateResponseFactory;
 
 /**
  * @Security ROLE_ADMIN
@@ -13,11 +12,11 @@ class JavaScriptController
 {
 
     /**
-     * @var TemplateResponse
+     * @var TemplateResponseFactory
      */
     private $template_response;
 
-    public function __construct(TemplateResponse $template_response)
+    public function __construct(TemplateResponseFactory $template_response)
     {
         $this->template_response = $template_response;
     }
@@ -30,6 +29,7 @@ class JavaScriptController
      */
     public function index()
     {
-        return $this->template_response->template("admin/generator/js/index.js.twig");
+        return $this->template_response->createResponse("admin/generator/js/index.js.twig");
     }
+
 }

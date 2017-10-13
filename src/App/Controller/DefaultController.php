@@ -2,17 +2,17 @@
 
 namespace App\Controller;
 
-use Gephart\Framework\Response\TemplateResponse;
+use Gephart\Framework\Response\TemplateResponseFactory;
 
 final class DefaultController
 {
 
     /**
-     * @var TemplateResponse
+     * @var TemplateResponseFactory
      */
     private $response;
 
-    public function __construct(TemplateResponse $template_response)
+    public function __construct(TemplateResponseFactory $template_response)
     {
         $this->response = $template_response;
     }
@@ -22,6 +22,6 @@ final class DefaultController
      */
     public function index()
     {
-        return $this->response->template("_framework/default.html.twig");
+        return $this->response->createResponse("_framework/default.html.twig");
     }
 }

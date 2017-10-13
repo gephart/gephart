@@ -9,11 +9,12 @@ use Admin\Generator\Service\ControllerGenerator;
 use Admin\Generator\Service\EntityGenerator;
 use Admin\Generator\Service\RepositoryGenerator;
 use Admin\Generator\Service\ViewGenerator;
-use Gephart\Framework\Response\TemplateResponse;
+use Gephart\Framework\Response\JsonResponseFactory;
+use Gephart\Framework\Response\TemplateResponseFactory;
+use Gephart\Framework\Response\TextResponseFactory;
 use Gephart\ORM\EntityManager;
 use Gephart\ORM\SQLBuilder;
-use Gephart\Request\Request;
-use Gephart\Response\ResponseJson;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * @Security ROLE_ADMIN
@@ -23,12 +24,22 @@ class AjaxController
 {
 
     /**
-     * @var TemplateResponse
+     * @var TemplateResponseFactory
      */
     private $template_response;
 
     /**
-     * @var Request
+     * @var JsonResponseFactory
+     */
+    private $json_response;
+
+    /**
+     * @var TextResponseFactory
+     */
+    private $text_response;
+
+    /**
+     * @var ServerRequestInterface
      */
     private $request;
 
@@ -72,8 +83,10 @@ class AjaxController
     private $view_generator;
 
     public function __construct(
-        TemplateResponse $template_response,
-        Request $request,
+        TemplateResponseFactory $template_response,
+        JsonResponseFactory $json_response,
+        TextResponseFactory $text_response,
+        ServerRequestInterface $request,
         ModuleRepository $module_repository,
         ItemRepository $item_repository,
         EntityManager $entity_manager,
@@ -84,6 +97,8 @@ class AjaxController
         SQLBuilder $sql_builder
     ) {
         $this->template_response = $template_response;
+        $this->json_response = $json_response;
+        $this->text_response = $text_response;
         $this->request = $request;
         $this->module_repository = $module_repository;
         $this->item_repository = $item_repository;
@@ -103,12 +118,13 @@ class AjaxController
      */
     public function newItem()
     {
+        $queryParams = $this->request->getQueryParams();
         $iterator = 0;
-        if ($this->request->get("iterator")) {
-            $iterator = $this->request->get("iterator");
+        if (!empty($queryParams["iterator"])) {
+            $iterator = $queryParams["iterator"];
         }
         $modules = $this->module_repository->findBy();
-        return $this->template_response->template("admin/generator/snippet/item.html.twig", [
+        return $this->template_response->createResponse("admin/generator/snippet/item.html.twig", [
             "iterator" => $iterator,
             "modules" => $modules
         ]);
@@ -122,7 +138,7 @@ class AjaxController
      */
     public function tableSync()
     {
-        $id = $this->request->get("id");
+        $id = $this->request->getQueryParams()["id"];
         if (!$id) {
             throw new \Exception("Id must be sent in request.");
         }
@@ -137,7 +153,7 @@ class AjaxController
 
         $this->entity_manager->syncTable("App\\Entity\\".$module->getEntityName());
 
-        return $sql;
+        return $this->text_response->createResponse($sql);
     }
 
     /**
@@ -148,12 +164,13 @@ class AjaxController
      */
     public function entitySync()
     {
-        $id = $this->request->get("id");
+        $id = $this->request->getQueryParams()["id"];
         if (!$id) {
             throw new \Exception("Id must be sent in request.");
         }
 
-        return $this->entity_generator->generate($id);
+        $result = $this->entity_generator->generate($id);
+        return $this->text_response->createResponse($result);
     }
 
     /**
@@ -164,12 +181,13 @@ class AjaxController
      */
     public function controllerSync()
     {
-        $id = $this->request->get("id");
+        $id = $this->request->getQueryParams()["id"];
         if (!$id) {
             throw new \Exception("Id must be sent in request.");
         }
 
-        return $this->controller_generator->generate($id);
+        $result = $this->controller_generator->generate($id);
+        return $this->text_response->createResponse($result);
     }
 
     /**
@@ -180,12 +198,13 @@ class AjaxController
      */
     public function repositorySync()
     {
-        $id = $this->request->get("id");
+        $id = $this->request->getQueryParams()["id"];
         if (!$id) {
             throw new \Exception("Id must be sent in request.");
         }
 
-        return $this->repository_generator->generate($id);
+        $result = $this->repository_generator->generate($id);
+        return $this->text_response->createResponse($result);
     }
 
     /**
@@ -196,12 +215,13 @@ class AjaxController
      */
     public function viewSync()
     {
-        $id = $this->request->get("id");
+        $id = $this->request->getQueryParams()["id"];
         if (!$id) {
             throw new \Exception("Id must be sent in request.");
         }
 
-        return $this->view_generator->generate($id);
+        $result = $this->view_generator->generate($id);
+        return $this->text_response->createResponse($result);
     }
 
     /**
@@ -212,7 +232,7 @@ class AjaxController
      */
     public function saveSortModules()
     {
-        $sorts = $this->request->get("sorts");
+        $sorts = $this->request->getQueryParams()["sorts"];
         if (empty($sorts)) {
             throw new \Exception("Sorts must be sent in request.");
         }
@@ -230,6 +250,7 @@ class AjaxController
             }
         }
 
-        return new ResponseJson(["sorted" => $sort]);
+        $data = ["sorted" => $sort];
+        return $this->json_response->createResponse($data);
     }
 }

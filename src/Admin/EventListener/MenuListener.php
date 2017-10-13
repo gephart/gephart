@@ -3,7 +3,7 @@
 namespace Admin\EventListener;
 
 use Admin\Model\Menu;
-use Admin\Response\BackendTemplateResponse;
+use Admin\Response\AdminResponseFactory;
 use Gephart\EventManager\Event;
 use Gephart\EventManager\EventManager;
 
@@ -18,7 +18,7 @@ class MenuListener
     {
         $this->menu = $menu;
 
-        $event_manager->attach(BackendTemplateResponse::DATA_TRANSMIT_EVENT, [$this, "dataPrepend"]);
+        $event_manager->attach(AdminResponseFactory::DATA_TRANSMIT_EVENT, [$this, "dataPrepend"]);
     }
 
     public function dataPrepend(Event $event)

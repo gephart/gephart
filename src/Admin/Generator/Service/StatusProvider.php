@@ -15,7 +15,8 @@ final class StatusProvider
 
     public function __construct(
         Connector $connector
-    ) {
+    )
+    {
         $this->connector = $connector;
     }
 
@@ -46,8 +47,7 @@ final class StatusProvider
         return $status;
     }
 
-    private function setStatusByController(ModuleStatus $status, string $entity_name)
-    {
+    private function setStatusByController(ModuleStatus $status, string $entity_name) {
         $controller_dir = realpath(__DIR__ . "/../../Controller");
 
         if (file_exists($controller_dir . "/" . $entity_name . "Controller.php")) {
@@ -55,8 +55,7 @@ final class StatusProvider
         }
     }
 
-    private function setStatusByEntity(ModuleStatus $status, string $entity_name)
-    {
+    private function setStatusByEntity(ModuleStatus $status, string $entity_name) {
         $entity_dir = realpath(__DIR__ . "/../../../App/Entity");
 
         if (file_exists($entity_dir . "/" . $entity_name . ".php")) {
@@ -64,8 +63,7 @@ final class StatusProvider
         }
     }
 
-    private function setStatusByRepository(ModuleStatus $status, string $entity_name)
-    {
+    private function setStatusByRepository(ModuleStatus $status, string $entity_name) {
         $repository_dir = realpath(__DIR__ . "/../../../App/Repository");
 
         if (file_exists($repository_dir . "/" . $entity_name . "Repository.php")) {
@@ -73,8 +71,7 @@ final class StatusProvider
         }
     }
 
-    private function setStatusByView(ModuleStatus $status, string $entity_name)
-    {
+    private function setStatusByView(ModuleStatus $status, string $entity_name) {
         $view_dir = realpath(__DIR__ . "/../../../../template/admin/");
 
         if (file_exists($view_dir . "/" . $entity_name . "/index.html.twig")
@@ -83,8 +80,7 @@ final class StatusProvider
         }
     }
 
-    private function setStatusByTable(ModuleStatus $status, Module $module)
-    {
+    private function setStatusByTable(ModuleStatus $status, Module $module) {
         if ($result = $this->connector->getPdo()->query("SHOW TABLES LIKE '".$module->getSlugSingular()."'")) {
             if ($result->rowCount() == 1) {
                 $status->setTable(true);
