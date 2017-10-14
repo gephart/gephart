@@ -59,7 +59,7 @@ class {{ module.entityName }}Controller
             ${{ module.slugSingular }} = new {{ module.entityName }}();
             $this->mapEntityFromArray(${{ module.slugSingular }}, $postData, $filesData);
 
-            EntityManeger::save(${{ module.slugSingular }});
+            EntityManager::save(${{ module.slugSingular }});
 
             Router::redirectTo("admin_{{ module.slugSingular }}");
         }
