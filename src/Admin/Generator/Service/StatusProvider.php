@@ -76,6 +76,7 @@ final class StatusProvider
     private function setStatusByView(ModuleStatus $status, string $entity_name)
     {
         $view_dir = realpath(__DIR__ . "/../../../../template/admin/");
+        $entity_name = strtolower($entity_name);
 
         if (file_exists($view_dir . "/" . $entity_name . "/index.html.twig")
             && file_exists($view_dir . "/" . $entity_name . "/edit.html.twig")) {
