@@ -43,13 +43,19 @@
         <br/>
     </div>
 
+{{ "{%" }} if {{ module.slugPlural }} is not empty {{ "%}" }}
+
     <div class="table-responsive panel panel-default">
         <table class="table table-bordered table-striped">
+            <tr>
+                {% for item in items if item.tableShow -%}
+                    <th>{{ item.name }}</th>
+                {%- endfor -%}
+                <th>Akce</th>
+            </tr>
             {{ "{%" }} for {{ module.slugSingular }} in {{ module.slugPlural }} {{ "%}" }}
                 <tr>
-{% set break = false %}
-{% for item in items %}
-{% if item.tableShow %}
+{% for item in items if item.tableShow %}
                     <td>{{- "\n" -}}
                         {%- for type in types -%}
                             {%- if item.type == type.name -%}
@@ -58,7 +64,6 @@
                             {%- endif -%}
                         {%- endfor %}
                     </td>
-{% endif %}
 {% endfor %}
                     <td width="130">
                         <a class="btn btn-xs btn-success" href="{{ "{{" }} _router.generateUrl("admin_{{ module.slugSingular }}_edit", {"id":{{ module.slugSingular }}.id}) {{ "}}" }}">upravit</a>
@@ -69,5 +74,6 @@
             {{ "{%" }} endfor {{ "%}" }}
         </table>
     </div>
+{{ "{%" }} endif {{ "%}" }}
 
 {{ "{%" }} endblock {{ "%}" }}
