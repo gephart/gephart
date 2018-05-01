@@ -5,6 +5,8 @@
     <base href="{{ _base_uri }}"/>
     <title>{% block title %}Admin{% endblock %}</title>
 
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons|Source+Code+Pro:300,400,700,900|Source+Sans+Pro:200,400,400i,700,700i" rel="stylesheet">
+
     <link rel="stylesheet" href="assets/admin/css/bootstrap.css">
     <link rel="stylesheet" href="assets/admin/css/bootstrap-theme.css">
     <script src="assets/admin/js/bootstrap.js"></script>
@@ -13,7 +15,11 @@
 <div class="container">
 
     <div class="jumbotron">
-        <h1>Login</h1>
+        <div id="logo">
+            <a href="{{ _router.generateUrl("admin_homepage") }}">
+                <img src="img/gephart.svg" alt="Gephart"/>
+            </a>
+        </div>
 
         <form action="{{ _route.generateUrl("admin_login") }}" method="post">
             <div class="form-group">
