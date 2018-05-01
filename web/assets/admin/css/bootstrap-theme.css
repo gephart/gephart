@@ -563,6 +563,10 @@ body {
   border-color: #111!important;
 }
 
+.table-striped > tbody > tr:nth-of-type(odd) {
+  background: #fcfcfc;
+}
+
 .nav-tabs > li > a:hover,
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus, .nav-tabs {
   border-color: transparent;
