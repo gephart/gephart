@@ -42,7 +42,7 @@ class DeleteController
     {
         $module = $this->module_repository->find($id);
         $this->removeItems($id);
-        $this->entity_manager->remove($module);
+        EntityManager::remove($module);
 
         Router::redirectTo("admin_generator");
     }
