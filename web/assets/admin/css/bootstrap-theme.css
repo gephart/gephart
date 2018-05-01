@@ -458,9 +458,8 @@ body {
 }
 
 #user {
-  position: absolute;
-  top: 0;
-  right: 0;
+  float: right;
+  position: relative;
   cursor: pointer;
 }
 
@@ -493,8 +492,9 @@ body {
 #content h1 {
   font-weight: 700;
   font-size: 26px;
-  padding: 30px;
-  margin: 0 -30px 16px -30px;
+  padding: 12px 30px;
+  margin: 0 -30px 30px -30px;
+  background: #eccd40;
 }
 
 #logo {

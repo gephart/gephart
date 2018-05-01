@@ -4,7 +4,7 @@
 
     <h1>{{ module.name }} - úprava</h1>
 
-    <form action="{{ "{{" }} _router.generateUrl("admin_{{ module.slugSingular }}_edit", {"id":{{ module.slugSingular }}.id}) {{ "}}" }}" method="post" enctype="multipart/form-data">
+    <form action="{{ "{{" }} _router.generateUrl("admin_{{ module.slugSingular }}_edit", {"id":{{ module.slugSingular }}.id}) {{ "}}" }}" method="post" enctype="multipart/form-data"  class="panel panel-default panel-body">
 {% for item in items %}
 {% if item.isRelation %}
             <div class="form-group">

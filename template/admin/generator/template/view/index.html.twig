@@ -9,7 +9,7 @@
     </p>
 
     <div id="form-add" style="display: none">
-        <form action="{{ "{{" }} _router.generateUrl("admin_{{ module.slugSingular }}") {{ "}}" }}" method="post" enctype="multipart/form-data">
+        <form action="{{ "{{" }} _router.generateUrl("admin_{{ module.slugSingular }}") {{ "}}" }}" method="post" enctype="multipart/form-data"  class="panel panel-default panel-body">
 {% for item in items %}
 {% if item.isRelation %}
             <div class="form-group">

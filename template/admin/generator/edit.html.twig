@@ -5,24 +5,26 @@
     <h1>Generátor - Úprava modulu</h1>
 
     <form action="{{ _route.generateUrl("admin_generator") }}" method="post">
-        <table class="table table-bordered table-blackhead">
-            <tr>
-                <th width="50%">Název modulu</th>
-                <th>Slug - Jednotné číslo</th>
-                <th>Slug - Množné číslo</th>
-            </tr>
-            <tr>
-                <td>
-                    <input value="{{ module.name }}" type="text" class="form-control" name="name" required="required">
-                </td>
-                <td>
-                    <input value="{{ module.slugSingular }}" type="text" class="form-control" name="slug_singular" required="required">
-                </td>
-                <td>
-                    <input value="{{ module.slugPlural }}" type="text" class="form-control" name="slug_plural" required="required">
-                </td>
-            </tr>
-        </table>
+        <div class="table-responsive panel-default panel">
+            <table class="table table-bordered table-blackhead">
+                <tr>
+                    <th width="50%">Název modulu</th>
+                    <th>Slug - Jednotné číslo</th>
+                    <th>Slug - Množné číslo</th>
+                </tr>
+                <tr>
+                    <td>
+                        <input value="{{ module.name }}" type="text" class="form-control" name="name" required="required">
+                    </td>
+                    <td>
+                        <input value="{{ module.slugSingular }}" type="text" class="form-control" name="slug_singular" required="required">
+                    </td>
+                    <td>
+                        <input value="{{ module.slugPlural }}" type="text" class="form-control" name="slug_plural" required="required">
+                    </td>
+                </tr>
+            </table>
+        </div>
 
 
         <div>
