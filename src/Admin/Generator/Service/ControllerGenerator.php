@@ -31,17 +31,24 @@ class ControllerGenerator
      */
     private $template_engine;
 
+    /**
+     * @var Types
+     */
+    private $types;
+
     public function __construct(
         EntityManager $entity_manager,
         ModuleRepository $module_repository,
         ItemRepository $item_repository,
-        Engine $template_engine
+        Engine $template_engine,
+        Types $types
     ) {
         $this->entity_manager = $entity_manager;
         $this->module_repository = $module_repository;
         $this->item_repository = $item_repository;
         $this->template_engine = $template_engine;
         $this->controller_dir = realpath(__DIR__ . "/../../Controller");
+        $this->types = $types;
     }
 
     public function isGenerated(int $module_id)
@@ -58,11 +65,13 @@ class ControllerGenerator
         $items = $this->item_repository->findBy(["module_id = %1", $module_id], ["ORDER BY" => "id"]);
 
         $entities = $this->getEntities($module, $items);
+        $types = $this->types->getTypes()->all();
 
         $entity_template = $this->template_engine->render("admin/generator/template/controller.php.twig", [
             "module" => $module,
             "items" => $items,
-            "entities" => $entities
+            "entities" => $entities,
+            "types" => $types
         ]);
 
         $filename = $module->getEntityName() . "Controller.php";

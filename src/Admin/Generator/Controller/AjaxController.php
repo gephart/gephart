@@ -8,6 +8,7 @@ use Admin\Generator\Repository\ModuleRepository;
 use Admin\Generator\Service\ControllerGenerator;
 use Admin\Generator\Service\EntityGenerator;
 use Admin\Generator\Service\RepositoryGenerator;
+use Admin\Generator\Service\Types;
 use Admin\Generator\Service\ViewGenerator;
 use Gephart\Framework\Facade\Request;
 use Gephart\Framework\Facade\Response;
@@ -59,6 +60,11 @@ class AjaxController
      */
     private $view_generator;
 
+    /**
+     * @var Types
+     */
+    private $types;
+
     public function __construct(
         ModuleRepository $module_repository,
         ItemRepository $item_repository,
@@ -67,7 +73,8 @@ class AjaxController
         ControllerGenerator $controller_generator,
         RepositoryGenerator $repository_generator,
         ViewGenerator $view_generator,
-        SQLBuilder $sql_builder
+        SQLBuilder $sql_builder,
+        Types $types
     ) {
         $this->module_repository = $module_repository;
         $this->item_repository = $item_repository;
@@ -77,6 +84,7 @@ class AjaxController
         $this->controller_generator = $controller_generator;
         $this->repository_generator = $repository_generator;
         $this->view_generator = $view_generator;
+        $this->types = $types;
     }
 
     /**
@@ -89,13 +97,18 @@ class AjaxController
     {
         $queryParams = Request::getQueryParams();
         $iterator = 0;
+
         if (!empty($queryParams["iterator"])) {
             $iterator = $queryParams["iterator"];
         }
+
         $modules = $this->module_repository->findBy();
+        $types = $this->types->getTypes()->all();
+
         return Response::template("admin/generator/snippet/item.html.twig", [
             "iterator" => $iterator,
-            "modules" => $modules
+            "modules" => $modules,
+            "types" => $types
         ]);
     }
 

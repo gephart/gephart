@@ -30,17 +30,24 @@ class ViewGenerator
      */
     private $template_engine;
 
+    /**
+     * @var Types
+     */
+    private $types;
+
     public function __construct(
         EntityManager $entity_manager,
         ModuleRepository $module_repository,
         ItemRepository $item_repository,
-        Engine $template_engine
+        Engine $template_engine,
+        Types $types
     ) {
         $this->entity_manager = $entity_manager;
         $this->module_repository = $module_repository;
         $this->item_repository = $item_repository;
         $this->template_engine = $template_engine;
         $this->view_dir = realpath(__DIR__ . "/../../../../template/admin/");
+        $this->types = $types;
     }
 
     public function isGenerated(int $module_id)
@@ -55,10 +62,11 @@ class ViewGenerator
     {
         $module = $this->module_repository->find($module_id);
         $items = $this->item_repository->findBy(["module_id = %1", $module_id], ["ORDER BY" => "id"]);
+        $types = $this->types->getTypes()->all();
 
         $this->generateFolder($module);
-        $this->generateFile("edit", $module, $items);
-        $view_index_template = $this->generateFile("index", $module, $items);
+        $this->generateFile("edit", $module, $items, $types);
+        $view_index_template = $this->generateFile("index", $module, $items, $types);
 
         return htmlspecialchars($view_index_template);
     }
@@ -77,13 +85,14 @@ class ViewGenerator
         }
     }
 
-    private function generateFile(string $file, Module $module, array $items)
+    private function generateFile(string $file, Module $module, array $items, array $types)
     {
         $filename = $module->getSlugSingular();
 
         $view_template = $this->template_engine->render("admin/generator/template/view/$file.html.twig", [
             "module" => $module,
-            "items" => $items
+            "items" => $items,
+            "types" => $types
         ]);
 
         file_put_contents($this->view_dir . "/" . $filename . "/$file.html.twig", $view_template);

@@ -29,17 +29,24 @@ class EntityGenerator
      */
     private $template_engine;
 
+    /**
+     * @var Types
+     */
+    private $types;
+
     public function __construct(
         EntityManager $entity_manager,
         ModuleRepository $module_repository,
         ItemRepository $item_repository,
-        Engine $template_engine
+        Engine $template_engine,
+        Types $types
     ) {
         $this->entity_manager = $entity_manager;
         $this->module_repository = $module_repository;
         $this->item_repository = $item_repository;
         $this->template_engine = $template_engine;
         $this->entity_dir = realpath(__DIR__ . "/../../../App/Entity");
+        $this->types = $types;
     }
 
     public function isGenerated(int $module_id)
@@ -54,10 +61,12 @@ class EntityGenerator
     {
         $module = $this->module_repository->find($module_id);
         $items = $this->item_repository->findBy(["module_id = %1", $module_id], ["ORDER BY" => "id"]);
+        $types = $this->types->getTypes()->all();
 
         $entity_template = $this->template_engine->render("admin/generator/template/entity.php.twig", [
             "module" => $module,
-            "items" => $items
+            "items" => $items,
+            "types" => $types
         ]);
 
         $filename = $module->getEntityName() . ".php";

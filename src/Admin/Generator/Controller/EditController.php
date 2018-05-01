@@ -8,6 +8,7 @@ use Admin\Generator\Entity\Module;
 use Admin\Generator\Repository\ItemRepository;
 use Admin\Generator\Repository\ModuleRepository;
 use Admin\Generator\Service\StatusProvider;
+use Admin\Generator\Service\Types;
 use Gephart\Framework\Facade\EntityManager;
 use Gephart\Framework\Facade\Request;
 use Gephart\Framework\Facade\Router;
@@ -33,14 +34,21 @@ class EditController
      */
     private $status_provider;
 
+    /**
+     * @var Types
+     */
+    private $types;
+
     public function __construct(
         ModuleRepository $module_repository,
         ItemRepository $item_repository,
-        StatusProvider $status_provider
+        StatusProvider $status_provider,
+        Types $types
     ) {
         $this->module_repository = $module_repository;
         $this->item_repository = $item_repository;
         $this->status_provider = $status_provider;
+        $this->types = $types;
     }
 
     /**
@@ -62,12 +70,14 @@ class EditController
         $items = $this->item_repository->findBy(["module_id = %1", $id], ["ORDER BY" => "id"]);
         $modules = $this->module_repository->findBy();
         $status = $this->status_provider->getModuleStatus($module);
+        $types = $this->types->getTypes()->all();
 
         return AdminResponse::createResponse("admin/generator/edit.html.twig", [
             "modules" => $modules,
             "module" => $module,
             "items" => $items,
-            "status" => $status
+            "status" => $status,
+            "types" => $types
         ]);
     }
 

@@ -11,34 +11,7 @@
     <div id="form-add" style="display: none">
         <form action="{{ "{{" }} _router.generateUrl("admin_{{ module.slugSingular }}") {{ "}}" }}" method="post" enctype="multipart/form-data">
 {% for item in items %}
-{% if item.type == "text" %}
-            <div class="form-group">
-                <label for="form_new_{{ item.slug }}">{{ item.name }}</label>
-                <input type="text" name="{{ item.slug }}" class="form-control" id="form_new_{{ item.slug }}">
-            </div>
-{% elseif item.type == "textarea" %}
-            <div class="form-group">
-                <label for="form_new_{{ item.slug }}">{{ item.name }}</label>
-                <textarea class="form-control" name="{{ item.slug }}" rows="10" id="form_new_{{ item.slug }}"></textarea>
-            </div>
-{% elseif item.type == "bool" %}
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" name="{{ item.slug }}" value="1">
-                    {{ item.name }}
-                </label>
-            </div>
-{% elseif item.type == "date" %}
-            <div class="form-group">
-                <label for="form_new_{{ item.slug }}">{{ item.name }}</label>
-                <input type="date" name="{{ item.slug }}" class="form-control" id="form_new_{{ item.slug }}">
-            </div>
-{% elseif item.type == "file" or item.type == "image" %}
-            <div class="form-group">
-                <label for="form_new_{{ item.slug }}">{{ item.name }}</label>
-                <input type="file" name="{{ item.slug }}" class="form-control" id="form_new_{{ item.slug }}">
-            </div>
-{% elseif item.isRelation %}
+{% if item.isRelation %}
             <div class="form-group">
                 <label for="form_edit_{{ item.slug }}">{{ item.name }}</label>
                 <select name="{{ item.slug }}" class="form-control" id="form_edit_{{ item.slug }}">
@@ -56,7 +29,14 @@
                     {{ "{%" }} endfor {{ "%}" }}
                 </select>
             </div>
-{% endif %}
+{% else -%}
+    {%- for type in types -%}
+        {%- if item.type == type.name -%}
+            {{- include(template_from_string(type.form), {"item": item}) -}}
+            {{- "\n" -}}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endif %}
 {% endfor %}
             <button type="submit" class="btn btn-default">Přidat</button>
         </form>
@@ -72,7 +52,7 @@
 {% if item.type == "text" %}
 {% set break = true %}
                     <td>
-                        <a href="{{ "{{" }} _router.generateUrl("admin_{{ module.slugSingular }}_edit", {"id":{{ module.slugSingular }}.id}) {{ "}}" }}">{{ "{{" }} {{ module.slugSingular }}.{{ item.slug }} {{ "}}" }}</a>
+                        <a href="{{ "{{" }} _router.generateUrl("admin_{{ module.slugSingular }}_edit", {"id":{{ module.slugSingular }}.id}) {{ "}}" }}">{{ "{{" }} {{ module.slugSingular }}.{{ item.slugInCamel }} {{ "}}" }}</a>
                     </td>
 {% endif %}
 {% endfor %}

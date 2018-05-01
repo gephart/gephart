@@ -41,7 +41,7 @@
                         <div class="panel-body">
                             <div class="row js-generator-items">
                                 {% for item in items %}
-                                    {% include "admin/generator/snippet/item.html.twig" with {"iterator": loop.index0, "item": item} %}
+                                    {% include "admin/generator/snippet/item.html.twig" with {"iterator": loop.index0, "item": item, "types": types} %}
                                 {% endfor %}
                             </div>
                             <p>

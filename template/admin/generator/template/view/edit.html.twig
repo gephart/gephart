@@ -6,47 +6,7 @@
 
     <form action="{{ "{{" }} _router.generateUrl("admin_{{ module.slugSingular }}_edit", {"id":{{ module.slugSingular }}.id}) {{ "}}" }}" method="post" enctype="multipart/form-data">
 {% for item in items %}
-{% if item.type == "text" %}
-            <div class="form-group">
-                <label for="form_edit_{{ item.slug }}">{{ item.name }}</label>
-                <input value="{{ "{{" }} {{ module.slugSingular }}.{{ item.slugInCamel }} {{ "}}" }}" type="text" name="{{ item.slug }}" class="form-control" id="form_edit_{{ item.slug }}">
-            </div>
-{% elseif item.type == "textarea" %}
-            <div class="form-group">
-                <label for="form_edit_{{ item.slug }}">{{ item.name }}</label>
-                <textarea class="form-control" name="{{ item.slug }}" rows="10" id="form_edit_{{ item.slug }}">{{ "{{" }} {{ module.slugSingular }}.{{ item.slugInCamel }} {{ "}}" }}</textarea>
-            </div>
-{% elseif item.type == "bool" %}
-            <div class="checkbox">
-                <label>
-                    <input {{ "{%" }} if {{ module.slugSingular }}.{{ item.slugInCamel }} {{ "%}" }}checked{{ "{%" }} endif {{ "%}" }} type="checkbox" name="{{ item.slug }}" value="1">
-                    {{ item.name }}
-                </label>
-            </div>
-{% elseif item.type == "date" %}
-            <div class="form-group">
-                <label for="form_edit_{{ item.slug }}">{{ item.name }}</label>
-                <input value="{{ "{{" }} {{ module.slugSingular }}.{{ item.slugInCamel }}.format("Y-m-d") {{ "}}" }}" type="date" name="{{ item.slug }}" class="form-control" id="form_edit_{{ item.slug }}">
-            </div>
-{% elseif item.type == "file" %}
-            <div class="form-group">
-                <label for="form_new_{{ item.slug }}">{{ item.name }}</label>
-                <input type="file" name="{{ item.slug }}" class="form-control" id="form_new_{{ item.slug }}">
-                {{ "{%" }} if {{ module.slugSingular }}.{{ item.slugInCamel }} {{ "%}" }}
-                    <a href="upload/{{ "{{" }} {{ module.slugSingular }}.{{ item.slugInCamel }} {{ "}}" }}" target="_blank">zobrazit</a>
-                    <br/><label><input type="checkbox" name="{{ item.slug }}_delete"> Smazat</label>
-                {{ "{%" }} endif {{ "%}" }}
-            </div>
-{% elseif item.type == "image" %}
-            <div class="form-group">
-                <label for="form_new_{{ item.slug }}">{{ item.name }}</label>
-                <input type="file" name="{{ item.slug }}" class="form-control" id="form_new_{{ item.slug }}">
-                {{ "{%" }} if {{ module.slugSingular }}.{{ item.slugInCamel }} {{ "%}" }}
-                    <img style="width:auto;height:auto;max-width:200px;max-height:200px" src="upload/{{ "{{" }} {{ module.slugSingular }}.{{ item.slugInCamel }} {{ "}}" }}">
-                    <br/><label><input type="checkbox" name="{{ item.slug }}_delete"> Smazat</label>
-                {{ "{%" }} endif {{ "%}" }}
-            </div>
-{% elseif item.isRelation %}
+{% if item.isRelation %}
             <div class="form-group">
                 <label for="form_edit_{{ item.slug }}">{{ item.name }}</label>
                 <select name="{{ item.slug }}" class="form-control" id="form_edit_{{ item.slug }}">
@@ -68,7 +28,14 @@
                     {{ "{%" }} endfor {{ "%}" }}
                 </select>
             </div>
-{% endif %}
+{% else -%}
+    {%- for type in types -%}
+        {%- if item.type == type.name -%}
+            {{- include(template_from_string(type.form), {"item": item}) -}}
+            {{- "\n" -}}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endif %}
 {% endfor %}
         <button type="submit" class="btn btn-default">Uložit</button>
     </form>

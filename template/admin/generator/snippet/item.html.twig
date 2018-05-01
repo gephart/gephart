@@ -14,12 +14,10 @@
             </div>
             <div class="form-group">
                 <select type="text" name="items[{{ iterator }}][type]" class="form-control">
-                    <option {% if item and item.type == "text" %}selected{% endif %}>text</option>
-                    <option {% if item and item.type == "textarea" %}selected{% endif %}>textarea</option>
-                    <option {% if item and item.type == "bool" %}selected{% endif %}>bool</option>
-                    <option {% if item and item.type == "date" %}selected{% endif %}>date</option>
-                    <option {% if item and item.type == "file" %}selected{% endif %}>file</option>
-                    <option {% if item and item.type == "image" %}selected{% endif %}>image</option>
+                    {% for type in types %}
+                        <option {% if item and item.type == type.name %}selected{% endif %}>{{ type.name }}</option>
+                    {% endfor %}
+
                     <optgroup label="Vazba">
                         {% for relation_module in modules %}
                             <option value="{{ relation_module.entityName }}"

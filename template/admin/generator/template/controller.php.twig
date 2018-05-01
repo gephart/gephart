@@ -128,20 +128,12 @@ class {{ module.entityName }}Controller
 
     private function mapEntityFromArray({{ module.entityName }} ${{ module.slugSingular }}, array $data, array $files) {
 {% for item in items %}
-{% if item.type == "date" %}
-        ${{ module.slugSingular }}->set{{ item.slugInCamel }}(new \DateTime($data["{{ item.slug }}"]));
-{% elseif item.type == "file" or item.type == "image" %}
-        if (!empty($files["{{ item.slug }}"]) && $files["{{ item.slug }}"] instanceof UploadedFileInterface) {
-            ${{ module.slugSingular }}->set{{ item.slugInCamel }}($this->uploadFile($files["{{ item.slug }}"]));
-        }
-        if (isset($data["{{ item.slug }}_delete"])) {
-            ${{ module.slugSingular }}->set{{ item.slugInCamel }}("");
-        }
-{% elseif item.type == "bool" %}
-        ${{ module.slugSingular }}->set{{ item.slugInCamel }}((bool) isset($data["{{ item.slug }}"])?$data["{{ item.slug }}"]:false);
-{% else %}
-        ${{ module.slugSingular }}->set{{ item.slugInCamel }}($data["{{ item.slug }}"]);
-{% endif %}
+    {%- for type in types -%}
+        {%- if item.type == type.name -%}
+            {{- include(template_from_string(type.set), {"item": item}) -}}
+            {{- "\n" -}}
+        {%- endif -%}
+    {%- endfor -%}
 {% endfor %}
     }
 
