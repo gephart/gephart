@@ -42,6 +42,22 @@ class Item
     private $type = "";
 
     /**
+     * @var bool
+     *
+     * @ORM\Type TINYINT(1)
+     * @ORM\Column required
+     */
+    private $required = "";
+
+    /**
+     * @var bool
+     *
+     * @ORM\Type TINYINT(1)
+     * @ORM\Column table_show
+     */
+    private $table_show = "";
+
+    /**
      * @var int
      *
      * @ORM\Type int
@@ -149,5 +165,37 @@ class Item
     {
         $repository = __DIR__ . "/../../../App/Repository/" . $this->getType() . "Repository.php";
         return file_exists($repository);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRequired(): bool
+    {
+        return $this->required;
+    }
+
+    /**
+     * @param bool $required
+     */
+    public function setRequired(bool $required)
+    {
+        $this->required = $required;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTableShow(): bool
+    {
+        return $this->table_show;
+    }
+
+    /**
+     * @param bool $table_show
+     */
+    public function setTableShow(bool $table_show)
+    {
+        $this->table_show = $table_show;
     }
 }

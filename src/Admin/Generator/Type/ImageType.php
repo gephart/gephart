@@ -21,7 +21,6 @@ final class ImageType implements TypeInterface
     private \${{ item.slug }} = "";
     
 EOL;
-
     }
 
     public function getEntityMethods(): string
@@ -70,7 +69,6 @@ EOL;
                 {{ "{%" }} endif {{ "%}" }}
             </div>
 EOL;
-
     }
 
     public function getShow(): string
@@ -80,7 +78,6 @@ EOL;
                         <img style="width:auto;height:auto;max-width:200px;max-height:200px" src="upload/{{ "{{" }} {{ module.slugSingular }}.{{ item.slugInCamel }} {{ "}}" }}">
                     {{ "{%" }} endif {{ "%}" }}
 EOL;
-
     }
 
     public function getPriority(): int

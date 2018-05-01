@@ -21,7 +21,6 @@ final class BoolType implements TypeInterface
     private \${{ item.slug }} = false;
     
 EOL;
-
     }
 
     public function getEntityMethods(): string
@@ -63,7 +62,6 @@ EOL;
                 </label>
             </div>
 EOL;
-
     }
 
     public function getShow(): string
@@ -71,7 +69,6 @@ EOL;
         return <<<EOL
                         {{ "{{" }} {{ module.slugSingular }}.{{ item.slug }} ? "ano" : "ne" {{ "}}" }}
 EOL;
-
     }
 
     public function getPriority(): int

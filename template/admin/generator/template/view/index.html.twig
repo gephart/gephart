@@ -48,11 +48,15 @@
             {{ "{%" }} for {{ module.slugSingular }} in {{ module.slugPlural }} {{ "%}" }}
                 <tr>
 {% set break = false %}
-{% for item in items if not break %}
-{% if item.type == "text" %}
-{% set break = true %}
-                    <td>
-                        <a href="{{ "{{" }} _router.generateUrl("admin_{{ module.slugSingular }}_edit", {"id":{{ module.slugSingular }}.id}) {{ "}}" }}">{{ "{{" }} {{ module.slugSingular }}.{{ item.slugInCamel }} {{ "}}" }}</a>
+{% for item in items %}
+{% if item.tableShow %}
+                    <td>{{- "\n" -}}
+                        {%- for type in types -%}
+                            {%- if item.type == type.name -%}
+                                {{- include(template_from_string(type.show), {"item": item, "module": module}) -}}
+                                {{- "\n" -}}
+                            {%- endif -%}
+                        {%- endfor %}
                     </td>
 {% endif %}
 {% endfor %}

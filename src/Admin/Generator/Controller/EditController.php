@@ -131,6 +131,8 @@ class EditController
             $item->setName($item_data["name"]);
             $item->setSlug($item_data["slug"]);
             $item->setType($item_data["type"]);
+            $item->setRequired((bool)isset($item_data["required"]) ? $item_data["required"] : false);
+            $item->setTableShow((bool)isset($item_data["tableShow"]) ? $item_data["tableShow"] : false);
             $item->setModuleId($id);
 
             $items[] = $item;

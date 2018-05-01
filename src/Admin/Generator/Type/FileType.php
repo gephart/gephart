@@ -22,7 +22,6 @@ final class FileType implements TypeInterface
     private \${{ item.slug }} = "";
     
 EOL;
-
     }
 
     public function getEntityMethods(): string
@@ -71,7 +70,6 @@ EOL;
                 {{ "{%" }} endif {{ "%}" }}
             </div>
 EOL;
-
     }
 
     public function getShow(): string
@@ -81,7 +79,6 @@ EOL;
                         <a href="upload/{{ "{{" }} {{ module.slugSingular }}.{{ item.slugInCamel }} {{ "}}" }}" target="_blank">zobrazit</a>
                     {{ "{%" }} endif {{ "%}" }}
 EOL;
-
     }
 
     public function getPriority(): int

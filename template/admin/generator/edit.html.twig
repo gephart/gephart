@@ -87,7 +87,23 @@
                 </div>
             </div>
         </div>
+        <input type="hidden" name="sort" id="generator-item-sort">
         <button class="btn btn-info">Uložit</button>
     </form>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    {{ parent() }}
+
+    <script src="assets/admin/js/drag-arrange.js"></script>
+    <script>
+        function generatorItemModeInit() {
+            $('.js-generator-item').arrangeable({dragSelector: '.js-generator-item-move'});
+        }
+        generatorItemModeInit();
+    </script>
+
 
 {% endblock %}

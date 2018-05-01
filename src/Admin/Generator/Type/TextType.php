@@ -22,7 +22,6 @@ final class TextType implements TypeInterface
     private \${{ item.slug }} = "";
     
 EOL;
-
     }
 
     public function getEntityMethods(): string
@@ -59,10 +58,13 @@ EOL;
         return <<<EOL
             <div class="form-group">
                 <label for="form_edit_{{ item.slug }}">{{ item.name }}</label>
-                <input value="{{ "{{" }} {{ module.slugSingular }}.{{ item.slugInCamel }} {{ "}}" }}" type="text" name="{{ item.slug }}" class="form-control" id="form_edit_{{ item.slug }}">
+                <input value="{{ "{{" }} {{ module.slugSingular }}.{{ item.slugInCamel }} {{ "}}" }}" 
+                type="text" name="{{ item.slug }}" 
+                class="form-control" 
+                id="form_edit_{{ item.slug }}"
+                {% if item.required %}required="required"{% endif %}>
             </div>
 EOL;
-
     }
 
     public function getShow(): string
@@ -70,7 +72,6 @@ EOL;
         return <<<EOL
                         {{ "{{" }} {{ module.slugSingular }}.{{ item.slugInCamel }} {{ "}}" }}
 EOL;
-
     }
 
     public function getPriority(): int

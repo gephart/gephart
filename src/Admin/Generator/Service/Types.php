@@ -59,11 +59,10 @@ class Types
             $this->types->add(new $typeName);
         }
 
-        $this->types = $this->types->sort(function(TypeInterface $left, TypeInterface $right){
+        $this->types = $this->types->sort(function (TypeInterface $left, TypeInterface $right) {
             return $left->getPriority() < $right->getPriority();
         });
 
         return $this->types;
     }
-
 }

@@ -22,7 +22,6 @@ final class TextareaType implements TypeInterface
     private \${{ item.slug }} = "";
     
 EOL;
-
     }
 
     public function getEntityMethods(): string
@@ -59,10 +58,14 @@ EOL;
         return <<<EOL
             <div class="form-group">
                 <label for="form_edit_{{ item.slug }}">{{ item.name }}</label>
-                <textarea class="form-control" name="{{ item.slug }}" rows="10" id="form_edit_{{ item.slug }}">{{ "{{" }} {{ module.slugSingular }}.{{ item.slugInCamel }} {{ "}}" }}</textarea>
+                <textarea class="form-control" 
+                name="{{ item.slug }}" 
+                rows="10" 
+                id="form_edit_{{ item.slug }}" 
+                {% if item.required %} required="required"{% endif %}
+                >{{ "{{" }} {{ module.slugSingular }}.{{ item.slugInCamel }} {{ "}}" }}</textarea>
             </div>
 EOL;
-
     }
 
     public function getShow(): string
@@ -70,7 +73,6 @@ EOL;
         return <<<EOL
                         {{ "{{" }} {{ module.slugSingular }}.{{ item.slugInCamel }} {{ "}}" }}
 EOL;
-
     }
 
     public function getPriority(): int

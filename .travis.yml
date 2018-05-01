@@ -4,4 +4,4 @@ php:
 
 script:
   - composer install
-  - ./vendor/bin/phpcs --standard=PSR2 ./src
+  - ./vendor/bin/phpcs --standard=PSR2 ./src --ignore=./src/Admin/Generator/Type/

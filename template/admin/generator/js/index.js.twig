@@ -6,6 +6,7 @@ $(function () {
             "iterator": iterator
         }, function (html) {
             $(".js-generator-items").append(html);
+            generatorItemModeInit();
         });
 
         return false;
@@ -150,13 +151,21 @@ $(function () {
     $("body").on("drag.end.arrangeable", function(){
         var sorts = [];
 
-        $('.js-generator-module').each(function(){
-            sorts.push($(this).data("generator-module_id"));
-        });
+        if ($('.js-generator-module').length > 1) {
+            $('.js-generator-module').each(function(){
+                sorts.push($(this).data("generator-module_id"));
+            });
 
-        $.get("{{ _router.generateUrl("admin_generator_ajax_savesortmodules") }}", {
-            "sorts": sorts
-        });
+            $.get("{{ _router.generateUrl("admin_generator_ajax_savesortmodules") }}", {
+                "sorts": sorts
+            });
+        } else if ($('.js-generator-item').length > 1) {
+            $('.js-generator-item').each(function(){
+                sorts.push($(this).data("generator-item-iterator"));
+            });
+
+            $("#generator-item-sort").val(JSON.stringify(sorts));
+        }
     });
 
 });
