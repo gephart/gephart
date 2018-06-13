@@ -62,7 +62,7 @@ EOL;
                 name="{{ item.slug }}" 
                 class="form-control" 
                 id="form_edit_{{ item.slug }}"
-                {% if item.required % required="required"{% endif %}>
+                {% if item.required %} required="required"{% endif %}>
             </div>
 EOL;
     }
