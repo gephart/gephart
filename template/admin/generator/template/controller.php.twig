@@ -134,6 +134,11 @@ class {{ module.entityName }}Controller
             {{- "\n" -}}
         {%- endif -%}
     {%- endfor -%}
+    {%- if item.isRelation -%}
+        {{- "        " -}}
+        ${{ module.slugSingular }}->set{{ item.slugInCamel }}($data["{{ item.slug }}"]);
+        {{- "\n" -}}
+    {%- endif -%}
 {% endfor %}
     }
 
